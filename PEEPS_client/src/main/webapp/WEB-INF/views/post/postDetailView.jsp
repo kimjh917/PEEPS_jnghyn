@@ -23,8 +23,7 @@
 			<tr>
 				<td class="post_top_wrap">
 					<div class="post_top">
-						<img class="postuserphoto" src="<spring:url value='/resources/img/${peeps.m_photo}'/>">
-						<span class="memberid">${peeps.id}</span> 
+						
 					</div>
 				</td>
 			</tr>
