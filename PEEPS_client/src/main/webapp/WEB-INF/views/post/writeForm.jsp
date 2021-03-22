@@ -98,7 +98,7 @@
 		
 		
 		<script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
-		<script src="//dapi.kakao.com/v2/maps/sdk.js?appkey=3ed6849fd6d5d015aebf82a3eb747333&libraries=services"></script>
+		<script src="//dapi.kakao.com/v2/maps/sdk.js?appkey=84d2ab0cba961be165262c6b55a5fa3b&libraries=services"></script>
 					
 		<script>
 		var mapContainer = document.getElementById('map'), // 지도를 표시할 div
@@ -129,8 +129,7 @@
 					$('.xBtnSpan').append(html);
 					
 					// 주소로 상세 정보를 검색
-					geocoder.addressSearch(data.address, function(results,
-							status) {
+					geocoder.addressSearch(data.address, function(results,status) {
 						// 정상적으로 검색이 완료됐으면
 						if (status === daum.maps.services.Status.OK) {
 							var result = results[0]; //첫번째 결과의 값을 활용
@@ -234,7 +233,8 @@
 	    	
 	    	//ajax로 폼데이터 전송
 	    	$.ajax({
-	    		url : '${pageContext.request.contextPath}/rest/upload',
+	    		// 추후 aws 주소로 바꾸기
+				url: 'http://localhost:8081/post/rest/upload',
 	    		type : 'POST',
 	    		data : formData,
 	    		processData: false,
