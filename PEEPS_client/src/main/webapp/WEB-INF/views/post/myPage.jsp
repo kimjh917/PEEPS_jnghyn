@@ -100,6 +100,7 @@
 			"mId" : pathMemberId,
 			"mIdx" : memberidx
  		};
+		console.log("pathmId확인: ",pathmId);
 		
 		// post 리스트 정보 받아오기
 		$.ajax({
@@ -116,13 +117,15 @@
 				
 				// member 정보 받아오기
 				$.ajax({
-					url: '${pageContext.request.contextPath}/memberInfo',
+					url: '${pageContext.request.contextPath}/rest/memberInfo',
 					type: 'get',
 					data: pathmId,
 					success: function(data){
 						
-						var html = '<input type="hidden" id="idx" value="${peeps.m_idx}">';
-					 	   html += '<ul><li>${peeps.id}</li>'; 
+						console.log("!!!!!회원정보: ",data);
+						
+						var html = '<input type="hidden" id="idx" value="'+data.m_idx+'">';
+					 	   html += '<ul><li>'+data.id+'</li>'; 
 					 	   html += '<li><button id="pro_edit">';
 					 	   html += '<a>프로필 편집</a></button></li>';
 					 	   html += '</ul>';
@@ -130,8 +133,8 @@
 					 	   html += '<li>게시글</li><li>'+tpc+'</li>';
 					 	   html += '<li>팔로워</li><li><button id="foll_btn">29</button></li><li>팔로잉</li><li><button id="foll_btn">121</button></li>';
 					 	   html += '</ul>';
-					 	   html += '<div id="pro_name">${peeps.name}</div>';
-					 	   html += '<div id="pro_bio">${peeps.bio}</div>';
+					 	   html += '<div id="pro_name">'+data.name+'</div>';
+					 	   html += '<div id="pro_bio">'+data.bio+'</div>';
 					 	$('#pro_btn').append(html);
 					
 					},
