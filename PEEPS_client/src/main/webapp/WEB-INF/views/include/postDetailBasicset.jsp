@@ -291,6 +291,18 @@ body {
 #cmttxt_edit {
 	width: 400px;
 }
+
+.id, .postuserphoto, .memberid:hover {
+	cursor: pointer;
+}
+
+.cmtdiv>.postuserphoto:hover {
+	cursor: default;
+}
+
+.id {
+	font-weight: 800;
+}
 </style>
 
 <!--jquery 라이브러리 로드-->
@@ -359,8 +371,8 @@ body {
         			data: {"mIdx" : data.member_idx},
         			success: function(data){
         				console.log("회원 정보 : ",data);
-        				var html = '<img class="postuserphoto" src="<spring:url value="/resources/img/'+data.m_photo+'"/>">';
-        				   html += '<span class="memberid">'+data.id+'</span> ';
+        				var html = '<img class="postuserphoto" onclick="GoMyPage(' + data.m_idx + ')" src="<spring:url value="/resources/img/'+data.m_photo+'"/>">';
+        				   html += '<span class="memberid" onclick="GoMyPage(' + data.m_idx + ')">'+data.id+'</span> ';
         				$('.post_top').append(html);
         			},
         			error: function(e){
@@ -368,11 +380,12 @@ body {
         			}
             	});
             	
-                var infoHtml = '<input type="hidden" class="memberidx" value="' + data.member_idx + '">';
-                $('.memberid').append(infoHtml);
+                //var infoHtml = '<input type="hidden" class="memberidx" value="' + data.member_idx + '">';
+                //$('.memberid').append(infoHtml);
 
                 var pIdx = data.p_idx;
-
+				
+                // 본인 게시글일 경우 수정,삭제 버튼 추가
                 if (sessionMidx == data.member_idx) {
                     console.log("세션midx랑 게시글midx가 같습니다.");
                     var Btn = '<a class="deleteBtn" href="javascript:deletePost(' +
@@ -383,19 +396,15 @@ body {
                     $('.deBtn').append(Btn);
                 }
 
-                /* console.log(data.p_title); */
                 $('.ptitle').append(data.p_title);
 
                 var date = data.p_date - 540 * 60 * 1000;
                 date = new Date(date).toLocaleDateString();
 
-                /* console.log("date : ",date); */
                 $('.pdate').append(date);
 
                 var pcontent = '<pre>' + data.p_content + '</pre>';
                 $('.content').append(pcontent);
-
-                /* console.log("위치 : ", data.p_loc); */
 
                 if (data.p_loc != "") {
                     var plocHtml = '<img style="width: 30px; height: 30px;" src="<c:url value="/resources/icon/locpic.png"/>">';
@@ -404,38 +413,6 @@ body {
                 }
 
                 $('.likes').append(data.p_likes);
-
-                var postMidx = {
-                    "mIdx": data.member_idx
-                };
-
-                $.ajax({
-                    url: '${pageContext.request.contextPath}/user/idList',
-                    type: 'GET',
-                    data: postMidx,
-                    success: function(data) {
-                        console.log("ajax 성공시 data : ", data);
-
-                        $.each(data, function(index, item) {
-                            console.log("each문 안! : ", item.id);
-
-                            if (item.loginType == "email") {
-                                var html = '<img class="postuserphoto" onclick="GoMyPage(' + item.m_idx + ')" src="https://peepsmember.s3.ap-northeast-2.amazonaws.com/peeps/profile' + item.m_photo + '">';
-                                $('.post_top').append(html);
-                            } else {
-                                var html = '<img class="postuserphoto" onclick="GoMyPage(' + item.m_idx + ')" src="<c:url value="' + item.m_photo + '"/>">';
-                                $('.post_top').append(html);
-                            }
-
-                            var html2 = '<span class="memberid">' + item.id + '</span>';
-                            $('.post_top').append(html2);
-                        });
-
-                    },
-                    error: function(e) {
-                        console.log(e);
-                    }
-                });
 
             },
             error: function(e) {
@@ -446,25 +423,24 @@ body {
 
         // 컨트롤러로 값 넘기기 (회원 게시글 이미지 데이터 받기)
         $.ajax({
-            /* url : "http://localhost:8081/post/rest/member/post/detail/image?idx="+ postIdx, */
-            url: "${pageContext.request.contextPath}/rest/detail/image?idx=" + postIdx,
+        	// 추후 aws 주소로 바꾸기
+            url: "http://localhost:8081/post/rest/detail/image?idx=" + postIdx,
             type: 'post',
             success: function(data) {
-                /* console.log("게시물파일 ajax success", data); */
 
                 // 이미지가 없을 경우 게시글 내용 최소 사이즈 지정
                 if (data.length < 1) {
                     $('.content').attr('id', 'divMinHeight');
                 }
-
+                
+				// 이미지 1개
                 if (data.length == 1) {
-                    /* console.log("이미지 1개"); */
-                    var html = '<div class="oneImg"><img src="${pageContext.request.contextPath}/resources/fileupload/postfile/' + data[0].f_name + '"/></div>';
+                    var html = '<div class="oneImg"><img src="http://localhost:8081/post/resources/fileupload/postfile/' + data[0].f_name + '"/></div>';
                     $('.postpics').append(html);
                 }
-
+				
+				// 이미지 2개 이상
                 if (data.length > 1) {
-                    /* console.log("이미지 2개 이상"); */
 
                     var html = '<div id="carouselExampleIndicators" class="carousel slide" data-bs-interval="false">';
                     html += '<ol class="carousel-indicators"></ol>';
@@ -482,17 +458,16 @@ body {
                     var index = 0;
 
                     $.each(firstImg, function(index, item) {
-                        console.log("이미지 이름 : ", item.f_name);
 
                         var html1 = '<div class="carousel-item active">';
-                        html1 += '<img src="${pageContext.request.contextPath}/resources/fileupload/postfile/' + item.f_name + '" class="d-block w-100" alt="..."></div>';
+                        html1 += '<img src="http://localhost:8081/post/resources/fileupload/postfile/' + item.f_name + '" class="d-block w-100" alt="..."></div>';
                         $('.carousel-inner').append(html1);
                     })
 
                     var anthrImg = $(data).not(firstImg);
                     $.each(anthrImg, function(index, item) {
                         var html2 = '<div class="carousel-item">';
-                        html2 += '<img src="${pageContext.request.contextPath}/resources/fileupload/postfile/' + item.f_name + '" class="d-block w-100" alt="..."></div>';
+                        html2 += '<img src="http://localhost:8081/post/resources/fileupload/postfile/' + item.f_name + '" class="d-block w-100" alt="..."></div>';
                         $('.carousel-inner').append(html2);
                     })
                 }
@@ -505,7 +480,6 @@ body {
         }) // 파일 ajax 끝
 
         var mIdx = "${peeps.m_idx}";
-        console.log("멤버인덱스! : ", mIdx);
 
         var likeInfo = {
             "pIdx": postIdx,
@@ -513,8 +487,8 @@ body {
         };
         // 컨트롤러로 값 넘기기 (좋아요 여부 데이터 받기)
         $.ajax({
-            /* url : "http://localhost:8081/post/rest/member/post/likeChk", */
-            url: "${pageContext.request.contextPath}/rest/likeChk",
+        	// 추후 aws 주소로 바꾸기
+            url: "http://localhost:8081/post/rest/likeChk",
             type: 'GET',
             data: likeInfo,
             success: function(data) {
@@ -544,18 +518,14 @@ body {
 	    console.log(idx);
 	
 	    $.ajax({
-	        url: '${pageContext.request.contextPath}/mypage/chk',
+	    	url: '${pageContext.request.contextPath}/rest/memberInfo',
 	        type: 'get',
 	        data: {
-	            "m_idx": idx
+	            "mIdx": idx
 	        },
 	        success: function(data) {
 	
-	            var mid = data;
-	
-	            console.log(mid);
-	
-	            location.href = "${pageContext.request.contextPath}/user/mypage?id=" + encodeURI(encodeURIComponent(mid));
+	            location.href = "${pageContext.request.contextPath}/"+data.id;
 	        },
 	        error: function(e) {
 	            console.log("유저 정보 실패,,,,");
@@ -570,16 +540,15 @@ body {
 	    if (confirm('삭제하시겠습니까?')) {
 	
 	        $.ajax({
-	            /* url: "http://localhost:8081/post/rest/member/post/delete?idx="+pidx, */
-	            url: "${pageContext.request.contextPath}/rest/delete?idx=" + pidx,
+	        	// 추후 aws 주소로 바꾸기
+	            url: "http://localhost:8081/post/rest/delete?idx=" + pidx,
 	            type: 'GET',
 	            success: function(data) {
 	                var memberid = "${peeps.id}";
 	                window.location.href = "${pageContext.request.contextPath}/" + memberid;
-	                console.log(pidx + '번 게시물 삭제 완료');
 	            },
 	            error: function(e) {
-	
+					console.log(e);
 	            }
 	
 	        });
@@ -589,8 +558,6 @@ body {
 	
 	// 좋아요 버튼 클릭
 	function clickLikeBtn() {
-	    /* alert("좋아요버튼 클릭"); */
-	    /* console.log("좋아요버튼 함수 안 게시글 idx :",postIdx); */
 	    var memberidx = "${peeps.m_idx}";
 	    console.log("멤버 인덱스 : ", memberidx);
 	
@@ -600,8 +567,8 @@ body {
 	    };
 	
 	    $.ajax({
-	        /* url: "http://localhost:8081/post/rest/member/post/likes", */
-	        url: "${pageContext.request.contextPath}/rest/likes",
+	    	// 추후 aws 주소로
+	        url: "http://localhost:8081/post/rest/likes",
 	        type: 'get',
 	        data: likeInfo,
 	        success: function(data) {
@@ -626,7 +593,7 @@ body {
 	        },
 	        error: function(e) {
 	            console.log(e);
-	            console.log("좋아요 ajax 에러!!!!!!");
+	            console.log("좋아요 ajax 에러");
 	        }
 	
 	    }); // 좋아요 ajax 끝
@@ -642,31 +609,15 @@ body {
 		var origin = $('.comment .cmt #load_cmt').eq(idx).val();
 		var memberId = "${peeps.id}";
 		var memberphoto = "${peeps.m_photo}";
-		// 21.03.03 한경 사진 출력을 위한 로그인 타입 추가
-		var loginType = "${loginType}";
-
-		console.log(idx);
 
 		var html = "<div class='editForm'>";
-		html += "<img class='postuserphoto' src= 'https://peepsmember.s3.ap-northeast-2.amazonaws.com/peeps/profile"+memberphoto+"'>";
+		html += "<img class='postuserphoto' src='<c:url value='/resources/img/"+memberphoto+"'/>'>";
 		html += " <span class='id'>" + memberId + "</span>";
 		html += "<span id='cmtinputarea'> <textarea rows='10' name='cmt_content' class='cmttxt' id='cmttxt_edit' required>"
 				+ origin + "</textarea>";
 		html += "<input type='submit' id='cmt_edit_btn' value='수정'><input type='submit' id='cmt_cancle_btn' value='취소'></span></div>";
 
-		var s_html = "<div class='editForm'>";
-		s_html += "<img class='postuserphoto' src= '<c:url value='"+memberphoto+"'/>'>";
-		s_html += " <span class='id'>" + memberId + "</span>";
-		s_html += "<span id='cmtinputarea'> <textarea rows='10' name='cmt_content' class='cmttxt' id='cmttxt_edit' required>"
-				+ origin + "</textarea>";
-		s_html += "<input type='submit' id='cmt_edit_btn' value='수정'><input type='submit' id='cmt_cancle_btn' value='취소'></span></div>";
-
-		if (loginType = "email") {
-			$('.comment .cmt').eq(idx).replaceWith(html);
-		} else {
-			$('.comment .cmt').eq(idx).replaceWith(s_html);
-		}
-
+		$('.comment .cmt').eq(idx).replaceWith(html);
 	}
 
 	// 답글 누르면 폼 생기게
@@ -677,27 +628,14 @@ body {
 		// 세션받아오기
 		var memberId = "${peeps.id}";
 		var memberphoto = "${peeps.m_photo}";
-		// 21.03.03 한경 사진 출력을 위한 로그인 타입 추가
-		var loginType = "${loginType}";
 
 		var html = "<div class='editForm'>";
-		html += "<img class='postuserphoto' src= 'https://peepsmember.s3.ap-northeast-2.amazonaws.com/peeps/profile"+memberphoto+"'> ";
+		html += "<img class='postuserphoto' src='<c:url value='/resources/img/"+memberphoto+"'/>'>";
 		html += "<span class='id'>" + memberId + "</span>";
 		html += "<span id='cmtinputarea'> <textarea rows='10' name='cmt_content' class='cmttxt' id='reply_insert' placeholder='답글을 입력해주세요' required></textarea>";
 		html += "<input type='submit' id='reply_insert_btn' value='등록'><input type='submit' id='reply_cancle_btn' value='취소'></span></div>";
 
-		var s_html = "<div class='editForm'>";
-		s_html += "<img class='postuserphoto' src= '<c:url value='"+memberphoto+"'/>'> ";
-		s_html += "<span class='id'>" + memberId + "</span>";
-		s_html += "<span id='cmtinputarea'> <textarea rows='10' name='cmt_content' class='cmttxt' id='reply_insert' placeholder='답글을 입력해주세요' required></textarea>";
-		s_html += "<input type='submit' id='reply_insert_btn' value='등록'><input type='submit' id='reply_cancle_btn' value='취소'></span></div>";
-
-		if (loginType == 'email') {
-			$('.comment .cmt').eq(idx).append(html);
-		} else {
-			$('.comment .cmt').eq(idx).append(s_html);
-		}
-
+		$('.comment .cmt').eq(idx).append(html);
 	}
 
 	// 대댓글 수정 누르면 폼 생기게
@@ -709,58 +647,43 @@ body {
 		// 세션받아오기
 		var memberId = "${peeps.id}";
 		var memberphoto = "${peeps.m_photo}";
-		// 21.03.03 한경 사진 출력을 위한 로그인 타입 추가
-		var loginType = "${loginType}";
 
 		var html = "<div class='editForm'>";
-		html += "<img class='postuserphoto' src= 'https://peepsmember.s3.ap-northeast-2.amazonaws.com/peeps/profile"+memberphoto+"'> ";
+		html += "<img class='postuserphoto' src='<c:url value='/resources/img/"+memberphoto+"'/>'>";
 		html += "<span class='id'>" + memberId + "</span>";
 		html += "<span id='cmtinputarea'> <textarea rows='10' name='cmt_content' class='cmttxt' id='reply_insert'  required>"
 				+ origin + "</textarea>";
 		html += "<input type='submit' id='reply_insert_btn' value='등록'><input type='submit' id='reply_cancle_btn' value='취소'></span></div>";
 
-		var s_html = "<div class='editForm'>";
-		s_html += "<img class='postuserphoto' src= '<c:url value='"+memberphoto+"'/>'> ";
-		s_html += "<span class='id'>" + memberId + "</span>";
-		s_html += "<span id='cmtinputarea'> <textarea rows='10' name='cmt_content' class='cmttxt' id='reply_insert'  required>"
-				+ origin + "</textarea>";
-		s_html += "<input type='submit' id='reply_insert_btn' value='등록'><input type='submit' id='reply_cancle_btn' value='취소'></span></div>";
-
-		if (loginType == 'email') {
-			$('.comment .cmt .reply').eq(idx).replaceWith(html);
-		} else {
-			$('.comment .cmt .reply').eq(idx).replaceWith(s_html);
-		}
-
+		$('.comment .cmt .reply').eq(idx).replaceWith(html);
 	}
 </script>
 
 <script>
 	loadComment();
+	
     function loadComment() {
     	var postIdx = getParameterByName('idx');
-        console.log("댓글 로드 포스트idx : ", postIdx);
 
         // 컨트롤러로 값 넘기기 (댓글 데이터 받기) 
         $.ajax({
-            /* url : 'http://localhost:8081/post/rest/cmt/select?PostNO=' + postIdx, */
-            /* url : '${pageContext.request.contextPath}/post/cmt/select?PostNO=' + postIdx, */
-            url: "${pageContext.request.contextPath}/rest/cmt/select?PostNO=" + postIdx,
+        	// 추후 aws로
+            url: "http://localhost:8081/post/rest/cmt/select?PostNO=" + postIdx,
             type: 'get',
             data: {
                 "postIdx": postIdx
             },
             success: function(data) {
-                console.log("댓글 성공");
-                console.log(data);
+                //console.log("댓글 성공");
+               // console.log(data);
                 var comment = data.cmtList;
-                console.log("코멘트리스트:", comment);
+                //console.log("코멘트리스트:", comment);
                 var member_idx = data.post.member_idx;
-                console.log("멤버idx:", member_idx);
+                //console.log("멤버idx:", member_idx);
 
 
                 $('.commentTotal').empty();
-                console.log("@@@총 댓글 수! : ", data.allCmtRplCnt);
+                //console.log("@@@총 댓글 수! : ", data.allCmtRplCnt);
                 $('.commentTotal').append(data.allCmtRplCnt);
 
                 $('.comment').empty();
@@ -768,11 +691,10 @@ body {
                     console.log("댓글 ajax each문 진입");
                     // 멤버 정보 받아오는 ajax 시작 (댓글)
                     $.ajax({
-                        url: '${pageContext.request.contextPath}/user/memberList',
-                        /* url: 'http://52.79.227.12:8080/peeps/user/memberList', */
+                        url: '${pageContext.request.contextPath}/rest/memberList',
                         type: 'GET',
                         success: function(data) {
-                            console.log("멤버 ajax success");
+                            //console.log("멤버 ajax success");
                             //console.log("멤버 데이터 : ", data)
 
                             $.each(data, function(index, mbr) {
@@ -782,19 +704,11 @@ body {
 
                                 if (mbr.m_idx == cmt.member_idx) {
 
-                                    // 세션 회원이랑 댓글 회원 idx 비교해서 수정 삭제 버튼 추가 여부 결정
+                                    // 본인일 경우 댓글 수정,삭제 추가
                                     if (cmt.member_idx == sessionMidx) {
-                                        if (mbr.loginType == 'email') {
-                                            $('.comment').append("<div class='cmt' id='" + cmt.cmt_idx + "'><img class='postuserphoto' onclick='GoMyPage(" + cmt.member_idx + ");' src= 'https://peepsmember.s3.ap-northeast-2.amazonaws.com/peeps/profile" + mbr.m_photo + "'> <span class='id' onclick='GoMyPage(" + cmt.member_idx + ");' >" + mbr.id + "</span> <input type='text' id='load_cmt' value='" + cmt.cmt_content + "'><button id='cmt_re' type='submit'>답글</button> <button id='cmt_edit' type='submit'>수정</button>  <button id='cmt_del' type='submit'>삭제</button><br><input type='hidden' id='replytext'></div>");
-                                        } else {
-                                            $('.comment').append("<div class='cmt' id='" + cmt.cmt_idx + "'><img class='postuserphoto' onclick='GoMyPage(" + cmt.member_idx + ");' src= '<c:url value='" + mbr.m_photo + "'/>'> <span class='id' onclick='GoMyPage(" + cmt.member_idx + ");' >" + mbr.id + "</span> <input type='text' id='load_cmt' value='" + cmt.cmt_content + "'><button id='cmt_re' type='submit'>답글</button> <button id='cmt_edit' type='submit'>수정</button>  <button id='cmt_del' type='submit'>삭제</button><br><input type='hidden' id='replytext'></div>");
-                                        }
+                                        $('.comment').append("<div class='cmt' id='" + cmt.cmt_idx + "'><img class='postuserphoto' onclick='GoMyPage(" + cmt.member_idx + ");' src= '<c:url value='/resources/img/"+mbr.m_photo+"'/>'> <span class='id' onclick='GoMyPage(" + cmt.member_idx + ");' >" + mbr.id + "</span> <input type='text' id='load_cmt' value='" + cmt.cmt_content + "'><button id='cmt_re' type='submit'>답글</button> <button id='cmt_edit' type='submit'>수정</button>  <button id='cmt_del' type='submit'>삭제</button><br><input type='hidden' id='replytext'></div>");
                                     } else {
-                                        if (mbr.loginType == 'email') {
-                                            $('.comment').append("<div class='cmt' id='" + cmt.cmt_idx + "'><img class='postuserphoto' onclick='GoMyPage(" + cmt.member_idx + ");' src= 'https://peepsmember.s3.ap-northeast-2.amazonaws.com/peeps/profile" + mbr.m_photo + "'> <span class='id' onclick='GoMyPage(" + cmt.member_idx + ");'>" + mbr.id + "</span> <input type='text' id='load_cmt' value='" + cmt.cmt_content + "'><button id='cmt_re' type='submit'>답글</button> <input id='cmt_edit' type='hidden'><input id='cmt_del' type='hidden'></div>");
-                                        } else {
-                                            $('.comment').append("<div class='cmt' id='" + cmt.cmt_idx + "'><img class='postuserphoto' onclick='GoMyPage(" + cmt.member_idx + ");' src= '<c:url value='" + mbr.m_photo + "'/>'> <span class='id' onclick='GoMyPage(" + cmt.member_idx + ");'>" + mbr.id + "</span> <input type='text' id='load_cmt' value='" + cmt.cmt_content + "'><button id='cmt_re' type='submit'>답글</button> <input id='cmt_edit' type='hidden'> <input id='cmt_del' type='hidden'></div>");
-                                        }
+                                        $('.comment').append("<div class='cmt' id='" + cmt.cmt_idx + "'><img class='postuserphoto' onclick='GoMyPage(" + cmt.member_idx + ");' src= '<c:url value='/resources/img/"+mbr.m_photo+"'/>'> <span class='id' onclick='GoMyPage(" + cmt.member_idx + ");'>" + mbr.id + "</span> <input type='text' id='load_cmt' value='" + cmt.cmt_content + "'><button id='cmt_re' type='submit'>답글</button> <input id='cmt_edit' type='hidden'><input id='cmt_del' type='hidden'></div>");
                                     }
 
                                 } // if mbr.m_idx == cmt.member_idx 끝
@@ -809,8 +723,8 @@ body {
 
                     // 대댓글
                     $.ajax({
-                        /* url : 'http://localhost:8081/post/rest/cmt/reply/select', */
-                        url: '${pageContext.request.contextPath}/rest/cmt/reply/select',
+                    	// 추후 aws로
+                        url: 'http://localhost:8081/post/rest/cmt/reply/select',
                         type: 'get',
                         data: {
                             "cmt_idx": cmt.cmt_idx
@@ -818,25 +732,20 @@ body {
                         success: function(data) {
                             $.each(data, function(index, reply) {
                                 if (cmt.cmt_idx == reply.comment_idx) {
-                                    console.log("댓idx=대댓idx 인 reply! : ", reply);
-                                    console.log("댓idx=대댓idx 인 reply 의 index! : ", index);
+                                    //console.log("댓idx=대댓idx 인 reply! : ", reply);
+                                    //console.log("댓idx=대댓idx 인 reply 의 index! : ", index);
 
                                     if (reply.member_idx == sessionMidx) {
-                                        console.log("&1 대댓 확인 : ", reply);
+                                       // console.log("&1 대댓 확인 : ", reply);
                                         // 멤버 정보 받아오는 ajax 시작 (대댓글)
                                         $.ajax({
-                                            url: '${pageContext.request.contextPath}/user/memberList',
-                                            /* url: 'http://52.79.227.12:8080/peeps/user/memberList', */
+                                            url: '${pageContext.request.contextPath}/rest/memberList',
                                             type: 'GET',
                                             success: function(data) {
                                                 $.each(data, function(index, mbr) {
-
+													
                                                     if (mbr.m_idx == reply.member_idx) {
-                                                        if (mbr.loginType == 'email') {
-                                                            $('#' + reply.comment_idx).append("<div class='reply' name='" + reply.re_idx + "'><img class='postuserphoto' onclick='GoMyPage(" + mbr.m_idx + ");' src= 'https://peepsmember.s3.ap-northeast-2.amazonaws.com/peeps/profile" + mbr.m_photo + "'> <span class='id' onclick='GoMyPage(" + mbr.m_idx + ");'> " + mbr.id + " </span> <input type='text' id='load_re' value='" + reply.re_content + "'><button id='re_edit' type='submit'>수정</button>  <button id='re_del' type='submit'>삭제</button></div>");
-                                                        } else {
-                                                            $('#' + reply.comment_idx).append("<div class='reply' name='" + reply.re_idx + "'><img class='postuserphoto' onclick='GoMyPage(" + mbr.m_idx + ");' src= '<c:url value='" + mbr.m_photo + "'/>'> <span class='id' onclick='GoMyPage(" + mbr.m_idx + ");'> " + mbr.id + " </span> <input type='text' id='load_re' value='" + reply.re_content + "'><button id='re_edit' type='submit'>수정</button>  <button id='re_del' type='submit'>삭제</button></div>");
-                                                        }
+                                                       $('#' + reply.comment_idx).append("<div class='reply' name='" + reply.re_idx + "'><img class='postuserphoto' onclick='GoMyPage(" + mbr.m_idx + ");' src= '<c:url value='/resources/img/"+mbr.m_photo+"'/>'> <span class='id' onclick='GoMyPage(" + mbr.m_idx + ");'> " + mbr.id + " </span> <input type='text' id='load_re' value='" + reply.re_content + "'><button id='re_edit' type='submit'>수정</button>  <button id='re_del' type='submit'>삭제</button></div>");
                                                     }
                                                 });
                                             },
@@ -850,18 +759,13 @@ body {
 
                                         // 멤버 정보 받아오는 ajax 시작 (대댓글)
                                         $.ajax({
-                                            url: '${pageContext.request.contextPath}/user/memberList',
-                                            /* url: 'http://52.79.227.12:8080/peeps/user/memberList', */
+                                            url: '${pageContext.request.contextPath}/rest/memberList',
                                             type: 'GET',
                                             success: function(data) {
                                                 $.each(data, function(index, mbr) {
-
+                                                	
                                                     if (mbr.m_idx == reply.member_idx) {
-                                                        if (mbr.loginType == 'email') {
-                                                            $('#' + reply.comment_idx).append("<div class='reply' name='" + reply.re_idx + "'><img class='postuserphoto' onclick='GoMyPage(" + mbr.m_idx + ");' src= 'https://peepsmember.s3.ap-northeast-2.amazonaws.com/peeps/profile" + mbr.m_photo + "'> <span class='id' onclick='GoMyPage(" + mbr.m_idx + ");'> " + mbr.id + "</span> <input type='text' id='load_re' value='" + reply.re_content + "'></div>");
-                                                        } else {
-                                                            $('#' + reply.comment_idx).append("<div class='reply' name='" + reply.re_idx + "'><img class='postuserphoto' onclick='GoMyPage(" + mbr.m_idx + ");' src= '<c:url value='" + mbr.m_photo + "'/>'> <span class='id' onclick='GoMyPage(" + mbr.m_idx + ");'> " + mbr.id + "</span> <input type='text' id='load_re' value='" + reply.re_content + "'></div>");
-                                                        }
+                                                    	$('#' + reply.comment_idx).append("<div class='reply' name='" + reply.re_idx + "'><img class='postuserphoto' onclick='GoMyPage(" + mbr.m_idx + ");' src= '<c:url value='/resources/img/"+mbr.m_photo+"'/>'> <span class='id' onclick='GoMyPage(" + mbr.m_idx + ");'> " + mbr.id + "</span> <input type='text' id='load_re' value='" + reply.re_content + "'></div>");
                                                     }
 
                                                 });
@@ -895,8 +799,7 @@ body {
 
     $(function() {
 
-        console.log("포스트IDX확인 : ", postIdx);
-
+        //console.log("포스트IDX확인 : ", postIdx);
 
         // 댓글 작성
         $(document).on("click", ".cmtbtn", function() {
@@ -911,7 +814,7 @@ body {
 
             } else {
                 $.ajax({
-                    url: '${pageContext.request.contextPath}/rest/cmt/insert',
+                    url: 'http://localhost:8081/post/rest/cmt/insert',
                     type: 'post',
                     async: false,
                     data: {
@@ -944,7 +847,7 @@ body {
 
                 $('.comment .cmt').eq(idx).remove();
                 $.ajax({
-                    url: '${pageContext.request.contextPath}/rest/cmt/del',
+                    url: 'http://localhost:8081/post/rest/cmt/del',
                     type: 'post',
                     async: false,
                     data: {
@@ -967,8 +870,7 @@ body {
 
         });
 
-        // 댓글 수정
-        // 수정 취소 추가
+        // 댓글 수정, 수정 취소
         $(document).on("click", "#cmt_edit", function() {
 
             var idx = $('.comment .cmt #cmt_edit').index(this);
@@ -984,7 +886,7 @@ body {
                     alert("내용을 입력해주세요");
                 } else {
                     $.ajax({
-                        url: '${pageContext.request.contextPath}/rest/cmt/edit',
+                        url: 'http://localhost:8081/post/rest/cmt/edit',
                         type: 'post',
                         async: false,
                         data: {
@@ -1015,171 +917,136 @@ body {
 </script>
 
 <script>
-    $(function() {
+$(function() {
 
-        //대댓글 작성
-        $(document)
-            .on(
-                "click",
-                "#cmt_re",
-                function() {
+    //대댓글 작성
+    $(document).on("click", "#cmt_re", function() {
 
-                    var idx = $('.comment .cmt #cmt_re').index(this);
-                    var cmt_idx = document
-                        .getElementsByClassName('cmt')[idx].id;
-                    replyForm(idx);
+        var idx = $('.comment .cmt #cmt_re').index(this);
+        var cmt_idx = document.getElementsByClassName('cmt')[idx].id;
+        replyForm(idx);
 
-                    $("#reply_insert_btn")
-                        .click(
-                            function() {
+        $("#reply_insert_btn").click(function() {
 
-                                var reply = $('#reply_insert')
-                                    .val();
+            var reply = $('#reply_insert').val();
 
-                                if (reply.trim() == "") {
-                                    alert("내용을 입력해주세요");
-                                } else {
-                                    // 세션 m_idx 값 넣기
+            if (reply.trim() == "") {
+                alert("내용을 입력해주세요");
+            } else {
+                // 세션 m_idx 값 넣기
 
-                                    var sessionMidx = "${peeps.m_idx}";
-                                    $
-                                        .ajax({
-                                            url: '${pageContext.request.contextPath}/rest/cmt/reply/insert',
-                                            type: 'post',
-                                            data: {
-                                                "comment_idx": cmt_idx,
-                                                "member_idx": sessionMidx,
-                                                "re_content": reply
-                                            },
-                                            success: function(
-                                                data) {
-                                                console
-                                                    .log("대댓글 작성 완료");
-                                                $(
-                                                        '#reply_insert')
-                                                    .val(
-                                                        '');
-                                                loadComment();
-                                            },
-                                            error: function() {
-                                                console
-                                                    .log("대댓글 작성 실패,,,,");
-                                            }
-                                        });
-                                }
-                            });
-
-                    // 작성 취소
-                    $("#reply_cancle_btn").click(function() {
+                var sessionMidx = "${peeps.m_idx}";
+                $.ajax({
+                	// 추후 aws로
+                    url: 'http://localhost:8081/post/rest/cmt/reply/insert',
+                    type: 'post',
+                    data: {
+                        "comment_idx": cmt_idx,
+                        "member_idx": sessionMidx,
+                        "re_content": reply
+                    },
+                    success: function(
+                        data) {
+                        console.log("대댓글 작성 완료");
+                        $('#reply_insert').val('');
                         loadComment();
-                    });
-
+                    },
+                    error: function() {
+                        console.log("대댓글 작성 실패,,,,");
+                    }
                 });
+            }
+        });
 
-        // 대댓글 수정
-        $(document)
-            .on(
-                "click",
-                "#re_edit",
-                function() {
+        // 작성 취소
+        $("#reply_cancle_btn").click(function() {
+            loadComment();
+        });
 
-                    var idx = $('.comment .cmt .reply #re_edit').index(
-                        this);
-                    var re_idx = document
-                        .getElementsByClassName('reply')[idx]
-                        .getAttribute('name');
+    });
 
-                    console.log(re_idx);
+    // 대댓글 수정
+    $(document).on("click", "#re_edit", function() {
 
-                    replyEdit(idx);
+        var idx = $('.comment .cmt .reply #re_edit').index(this);
+        var re_idx = document.getElementsByClassName('reply')[idx].getAttribute('name');
 
-                    $("#reply_insert_btn")
-                        .click(
-                            function() {
+        console.log(re_idx);
 
-                                var reply = $('#reply_insert')
-                                    .val();
+        replyEdit(idx);
 
-                                if (reply.trim() == "") {
-                                    alert("내용을 입력해주세요");
-                                } else {
-                                    $
-                                        .ajax({
-                                            url: '${pageContext.request.contextPath}/rest/cmt/reply/edit',
-                                            type: 'post',
-                                            async: false,
-                                            data: {
-                                                "re_idx": re_idx,
-                                                "re_content": reply
-                                            },
-                                            success: function(
-                                                data) {
-                                                console
-                                                    .log("대댓글 수정 완료");
-                                                $(
-                                                        '#cmttxt_edit')
-                                                    .val(
-                                                        '');
-                                                loadComment();
-                                            },
-                                            error: function() {
-                                                console
-                                                    .log("대댓글  실패,,,,");
-                                            }
-                                        });
-                                }
+        $("#reply_insert_btn").click(function() {
 
-                            });
+            var reply = $('#reply_insert').val();
 
-                    // 수정 취소
-                    $("#reply_cancle_btn").click(function() {
+            if (reply.trim() == "") {
+                alert("내용을 입력해주세요");
+            } else {
+                $.ajax({
+                	// 추후 aws로
+                    url: 'http://localhost:8081/post/rest/cmt/reply/edit',
+                    type: 'post',
+                    async: false,
+                    data: {
+                        "re_idx": re_idx,
+                        "re_content": reply
+                    },
+                    success: function(
+                        data) {
+                        console.log("대댓글 수정 완료");
+                        $('#cmttxt_edit').val('');
                         loadComment();
-                    });
-
+                    },
+                    error: function() {
+                        console.log("대댓글  실패,,,,");
+                    }
                 });
+            }
 
-        // 대댓글 삭제
-        $(document)
-            .on(
-                "click",
-                "#re_del",
-                function() {
+        });
 
-                    var idx = $('.comment .cmt .reply #re_del').index(
-                        this);
-                    var re_idx = document
-                        .getElementsByClassName('reply')[idx]
-                        .getAttribute('name');
+        // 수정 취소
+        $("#reply_cancle_btn").click(function() {
+            loadComment();
+        });
 
-                    if (confirm('댓글을 삭제하시겠습니까?')) {
+    });
 
-                        $('.comment .cmt #reply').eq(idx).remove();
-                        $
-                            .ajax({
-                                url: '${pageContext.request.contextPath}/rest/cmt/reply/del',
-                                type: 'post',
-                                async: false,
-                                data: {
-                                    "re_idx": re_idx
-                                },
-                                success: function(data) {
-                                    if (data == 1) {
-                                        console.log("대댓글 삭제 완료");
-                                        loadComment();
-                                    } else {
-                                        console.log("삭제 실패");
-                                    }
+    // 대댓글 삭제
+    $(document).on("click", "#re_del", function() {
 
-                                },
-                                error: function() {
-                                    console.log("수정 실패,,,,");
-                                }
-                            });
+        var idx = $('.comment .cmt .reply #re_del').index(this);
+        var re_idx = document.getElementsByClassName('reply')[idx].getAttribute('name');
 
+        if (confirm('댓글을 삭제하시겠습니까?')) {
+
+            $('.comment .cmt #reply').eq(idx).remove();
+            $.ajax({
+            	// 추후 aws로
+                url: 'http://localhost:8081/post/rest/cmt/reply/del',
+                type: 'post',
+                async: false,
+                data: {
+                    "re_idx": re_idx
+                },
+                success: function(data) {
+                    if (data == 1) {
+                        console.log("대댓글 삭제 완료");
+                        loadComment();
+                    } else {
+                        console.log("삭제 실패");
                     }
 
-                });
+                },
+                error: function() {
+                    console.log("수정 실패,,,,");
+                }
+            });
 
-    })
+        }
+
+    });
+
+})
 
 </script>
