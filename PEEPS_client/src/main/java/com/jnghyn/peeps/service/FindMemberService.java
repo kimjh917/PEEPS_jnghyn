@@ -32,10 +32,19 @@ public class FindMemberService {
 		Peeps peeps = null;
 		dao = template.getMapper(MemberDao.class);
 		peeps = dao.selectMemberInfo(mIdx);
-		System.out.println("getMemberInfo 속 midList !" + peeps);
 
 		return peeps;
 	}
+
+	public Peeps getMbrInfo(String mId) {
+		Peeps peeps = null;
+		dao = template.getMapper(MemberDao.class);
+		peeps = dao.selectMbrInfo(mId);
+		System.out.println("회원정보 : "+peeps);
+		return peeps;
+	}
+
+
 	
 	
 

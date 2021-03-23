@@ -22,10 +22,7 @@
 		<div class="jumbotron">
 		<!-- 프로필 -->
 			<div id="profile_wrap">
-				<img src="<spring:url value='/resources/img/profilephoto.jpg'/>" style="width: 200px; height: 200px;">
-				<div id="pro_btn">
 				
-				</div>
 			</div>
 		</div>
 		
@@ -86,15 +83,34 @@
 	   menuHtml += '<button><img src="<c:url value="/resources/icon/017-friends.png"/>"></button>'; 
 	   $('.menuselect').append(menuHtml);
 	
+	load_userInfo();
+	
+	function load_userInfo(){
+		// member 정보 받아오기
+		$.ajax({
+			url: '${pageContext.request.contextPath}/rest/mbrInfo',
+			type: 'get',
+			async : false,
+			data: {"mId":pathMemberId},
+			success: function(data){
+					
+				var html = '<img src="<spring:url value="/resources/img/'+data.m_photo+'"/>" style="width: 200px; height: 200px;">';
+				   html += '<div id="pro_btn"><input type="hidden" id="idx" value="'+data.m_idx+'"></div>';
+				$('#profile_wrap').append(html);
+				console.log("멤버정보!!",data);
+			},
+			error : function(request, status, error) {
+				console.log("에러 발생 : code = " +request.status + "message =" + request.responseText + "error : " + error);
+			}
+		});
+	};
+
 	load_MyPage();
 	
 	function load_MyPage(){
-		var html = '<input type="hidden" id="idx" value="'+${peeps.m_idx}+'">';
-		$('#pro_btn').append(html);
 		
-		console.log("document.ready 안 : ", pathMemberId);
 		var memberidx = $('#idx').val();
-		console.log(memberidx);
+		console.log("멤버인덱스!",memberidx);
 		
 		var pathmId = {
 			"mId" : pathMemberId,
@@ -196,6 +212,6 @@
 		
 	};
 
-	</script>
+</script>
 </body>
 </html>

@@ -9,6 +9,9 @@ public interface MemberDao {
 	// 전체 회원정보 조회
 	List<Peeps> selectMemberlist();
 
-	// 특정 회원정보 조회
+	// 인덱스로 특정 회원정보 조회
 	Peeps selectMemberInfo(int m_idx);
+	
+	// 아이디로 특정 회원정보 조회
+	Peeps selectMbrInfo(String mId);
 }

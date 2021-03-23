@@ -29,7 +29,7 @@ public class MemberRestController {
 		return findMemberService.getMemberList();
 	}
 	
-	// 특정 회원 정보 조회
+	// 인덱스로 특정 회원 정보 조회
 	@GetMapping("/memberInfo")
 	public Peeps MemberInfo(
 			@RequestParam("mIdx") int mIdx
@@ -38,6 +38,17 @@ public class MemberRestController {
 		System.out.println("member rest controller 진입");
 		
 		return findMemberService.getMemberInfo(mIdx);
+	}
+	
+	// 아이디로 특정 회원 정보 조회
+	@GetMapping("/mbrInfo")
+	public Peeps MbrInfo(
+			@RequestParam("mId") String mId
+			){
+		
+		System.out.println("member rest controller 진입");
+		
+		return findMemberService.getMbrInfo(mId);
 	}
 
 }
