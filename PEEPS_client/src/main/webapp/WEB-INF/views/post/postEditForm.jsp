@@ -25,8 +25,8 @@
 				</td>
 			</tr>
 			<tr>
-				<td>								<!-- test 회원idx  -->
-					<input type="hidden" name="userIdx" value="1">
+				<td>								
+					<input type="hidden" name="userIdx" value="${peeps.m_idx}">
 				</td>
 			</tr>
 			<!-- 날짜 -->
@@ -49,7 +49,7 @@
 						name="postformfile" id="postformfile"
 						multiple hidden>
 						<a href="javascript:" onclick="uploadImgBtnClick();" class="my_button">
-						<img id="imguploadbtn" src="<c:url value="/resources/images/imguploadbtn.png"/>"/> </a>
+						<img id="imguploadbtn" src="<c:url value="/resources/icon/imguploadbtn.png"/>"/> </a>
 						
 					</div>
 					<!-- 파일 프리뷰 -->
@@ -85,14 +85,14 @@
 					<script
 						src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
 					<script
-						src="//dapi.kakao.com/v2/maps/sdk.js?appkey=3ed6849fd6d5d015aebf82a3eb747333&libraries=services"></script>
+						src="//dapi.kakao.com/v2/maps/sdk.js?appkey=84d2ab0cba961be165262c6b55a5fa3b&libraries=services"></script>
 					</div>
 				</td>
 			</tr>
 			<!-- 버튼 -->
 			<tr>												
 				<td class="post_cnclorsubmt">	
-					<input type="button" value="취소" onclick="location.href='<c:url value="/user/mypage?id=${id}"/>'">
+					<input type="button" value="취소" onclick="location.href='<c:url value="/${peeps.id}"/>'">
 					<input type="button" value="등록" id="submitbtn" onclick="javascript:actionForm();">
 				</td>
 			</tr>
@@ -119,8 +119,8 @@
 			var postIdx = getParameterByName('idx');
 			// 게시글 데이터 받아오기
 			$.ajax({
-				url : "http://52.79.234.178:8080/post/rest/member/post/detail?idx="+ postIdx,
-				/* url : "http://localhost:8081/post/rest/member/post/detail?idx="+ postIdx, */
+				// aws로 바꾸기
+				url : "http://localhost:8081/post/rest/detail?idx="+ postIdx, 
 				type : 'GET',
 				async: false,
 				success : function(data){
@@ -159,16 +159,16 @@
 			
 			// 게시글 이미지 데이터 받아오기
 			$.ajax({
-				url : "http://52.79.234.178:8080/post/rest/member/post/detail/image?idx="+ postIdx,
-				/* url : "http://localhost:8081/post/rest/member/post/detail/image?idx="+ postIdx, */
+				// aws로 바꾸기
+				url : "http://localhost:8081/post/rest/detail/image?idx="+ postIdx,
 				type : 'post',
 				success : function(data){
 					console.log("이미지 데이터 : ",data);
 					
 					$.each(data,function(index, item){
 						var prvImgHtml = '<a href="javascript:void(0);" onclick=\"deleteOldImageAction('+ index + ');\" id="img_id_'+ index+ '" class="img_event" >';
-						   /* prvImgHtml += '<img src="<c:url value="/resources/fileupload/postfile/'+item.f_name+'"/>" style="width:148px; height:148px;" class="imgPrv" alt="postImages"></a>'; */
-						   prvImgHtml += '<img src="http://52.79.234.178:8080/post/resources/fileupload/postfile/'+item.f_name+'" style="width:148px; height:148px;" class="imgPrv" alt="postImages"></a>';
+						   prvImgHtml += '<img src="http://localhost:8081/post/resources/fileupload/postfile/'+item.f_name+'" style="width:148px; height:148px;" class="imgPrv" alt="postImages"></a>';
+						   /* prvImgHtml += '<img src="http://52.79.234.178:8080/post/resources/fileupload/postfile/'+item.f_name+'" style="width:148px; height:148px;" class="imgPrv" alt="postImages"></a>'; */
 						
 						   oldImage_list.push(item.f_name);
 						   
@@ -372,8 +372,9 @@
 	    			
 	    	//ajax로 폼데이터 전송
 	    	$.ajax({
-	    		url : 'http://52.79.234.178:8080/post/rest/member/post/edit',
-	    		/* url : 'http://localhost:8081/post/rest/member/post/edit', */
+	    		// aws로 바꾸기
+	    		/* url : 'http://52.79.234.178:8080/post/rest/edit', */
+	    		url : 'http://localhost:8081/post/rest/edit', 
 	    		type : 'POST',
 	    		data : formData,
 	    		processData: false,
@@ -382,7 +383,7 @@
 	    					
 	    		console.log("ajax 데이터 : ",data);			
 	    		/* window.location.href="http://52.79.227.12:8080/peeps/post/detail?idx="+postIdx; */
-	    		window.location.href="${pageContext.request.contextPath}/post/detail?idx="+postIdx;
+	    		window.location.href="${pageContext.request.contextPath}/detail?idx="+postIdx;
 	    		console.log("포스트idx 확인 : ", postIdx);
 	    		},error: function(e){
 	    		console.log("ajax전송에러");	

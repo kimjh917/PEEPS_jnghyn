@@ -117,7 +117,7 @@
 	font-size: 1.2em;
 }
 
-.mapPageBtn {
+#mapPageBtn {
 	border: 0px solid;
 	padding: 5px 10px;
 	border-radius: 4px;
@@ -127,9 +127,11 @@
 	background-color: white;
 	margin: 0px 5px;
 }
-
-.mapPageBtn:focus {
+#mapPageBtn:focus {
 	outline: none;
+	color: #F5E978;
+}
+.pgBtnColor {
 	color: #F5E978;
 }
 

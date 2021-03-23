@@ -84,6 +84,7 @@
 	   $('.menuselect').append(menuHtml);
 	
 	load_userInfo();
+	load_MyPage();
 	
 	function load_userInfo(){
 		// member 정보 받아오기
@@ -104,8 +105,6 @@
 			}
 		});
 	};
-
-	load_MyPage();
 	
 	function load_MyPage(){
 		

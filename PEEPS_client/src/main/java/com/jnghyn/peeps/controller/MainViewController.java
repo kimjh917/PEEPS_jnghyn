@@ -42,13 +42,12 @@ public class MainViewController {
 	}
 	
 	// 마이페이지의 지도 리스트
-//	@RequestMapping("/{mid}/map") 
-//	public String goMapMypage(
-//			@RequestParam(value = "p", defaultValue = "1") int p,
-//			@PathVariable("mid") String mid
-//			) {
-//		return "post/mapView";
-//	}
+	@RequestMapping("/{mid}/map") 
+	public String goMapMypage(
+			@PathVariable("mid") String mid
+			) {
+		return "post/myPageMap";
+	}
 	
 	// 게시글 상세보기
 	@RequestMapping("/detail")
