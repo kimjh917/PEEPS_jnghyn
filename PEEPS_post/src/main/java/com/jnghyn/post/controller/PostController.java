@@ -22,7 +22,6 @@ import com.jnghyn.post.service.PostEditService;
 import com.jnghyn.post.service.PostListService;
 import com.jnghyn.post.service.PostUploadService;
 
-
 @RestController
 @RequestMapping("rest")
 @CrossOrigin
@@ -39,30 +38,28 @@ public class PostController {
 	
 	// 게시글 업로드
 	@PostMapping("/upload")
-	public int uploadPost(PostWriteRequest writeRequest, HttpServletRequest request) {
+	public int uploadPost(
+			PostWriteRequest writeRequest, 
+			HttpServletRequest request) {
 		return uploadService.uploadPost(writeRequest, request);
 	}
 	
 	// 게시글 리스트 출력
 	@GetMapping("/list")
 	public PostListView getPostList(
-			@RequestParam(value = "p", defaultValue = "1") int page, 
 			HttpServletRequest request,
+			@RequestParam(value = "p", defaultValue = "1") int page, 
 			@RequestParam("mId") String mId,
 			@RequestParam("mIdx") int mIdx) {
-		System.out.println("mIdx : "+mIdx);
-		System.out.println("멤버아이디 : "+mId);
-		
 		return listService.getPostListView(page, request, mIdx);
 	}
 	
 	// 게시글 하나 출력
 	@GetMapping("/detail")
 	public Post getPostDetail(
-			@RequestParam("idx") int postIdx
-			, HttpServletRequest request 
+			@RequestParam("idx") int postIdx, 
+			HttpServletRequest request 
 			) {
-		
 		return listService.getDetail(postIdx);
 	}
 	
@@ -71,7 +68,6 @@ public class PostController {
 	public List<PostFile> getPostDetailImgs(
 			@RequestParam("idx") int postIdx
 			){
-		
 		return listService.getDetailImgs(postIdx);
 	}
 	
@@ -80,7 +76,6 @@ public class PostController {
 	public int deletePost(
 			@RequestParam("idx") int postIdx
 			) {
-		
 		return deleteService.deletePost(postIdx);
 	}
 	
@@ -90,7 +85,6 @@ public class PostController {
 			PostEditRequest editRequest,
 			HttpServletRequest request
 			) {
-		
 		return editService.editPost(editRequest, request);
 	}
 	
@@ -100,35 +94,24 @@ public class PostController {
 			@RequestParam("mId") String mId,
 			@RequestParam("mIdx") int mIdx,
 			HttpServletRequest request) {
-		
-		System.out.println("mIdx : "+mIdx);
-		System.out.println("멤버아이디 : "+mId);
-		
 		return listService.getMapListView(mIdx);
 	}
 	
 	// 마커 클릭 시 해당 주소가 추가된 게시글 리스트 출력
 	@PostMapping("/postmaplist")
-	public PostListView getMapPostList(
+	public List<Post> getMapPostList(
 			@RequestParam("postAdd") String pAddr,
 			@RequestParam("mIdx") int mIdx,
 			HttpServletRequest request) {
-			
-		System.out.println("게시글 클릭 주소 : "+pAddr);
-		System.out.println("게시글 멤버 인덱스 : "+mIdx);
-			
 		return listService.getPostListByMapView(mIdx, pAddr);
 	}
-		
-	// 좋아요 여부
+
+	//좋아요 여부
 	@GetMapping("/likeChk")
 	public Post getLikes(
 			HttpServletRequest request
 			) {
-		
 		int postIdx = Integer.parseInt(request.getParameter("pIdx"));
-		System.out.println("포스트인덱스 : "+postIdx);
-		
 		return listService.getLikes(postIdx, request);
 	}
 	
@@ -137,17 +120,10 @@ public class PostController {
 	public Post updateLikes(
 			HttpServletRequest request
 			) {
-		
 		int postIdx = Integer.parseInt(request.getParameter("pIdx"));
 		int mIdx = Integer.parseInt(request.getParameter("mIdx"));
-		System.out.println("포스트인덱스 : "+postIdx);
-		
 		return listService.updateLikes(postIdx, mIdx);
 	}
-	
-
-	
-
 
 
 }

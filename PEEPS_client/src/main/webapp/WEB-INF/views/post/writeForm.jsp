@@ -244,7 +244,7 @@
 	    		/* 세션으로 받아온 회원id */
 	    		var memberid = "${peeps.id}";
 	    		console.log("ajax 데이터 : ",data);				
-	    		//window.location.href="${pageContext.request.contextPath}/"+memberid;
+	    		window.location.href="${pageContext.request.contextPath}/"+memberid;
 	    					
 	    		},error: function(e){
 	    		console.log("ajax전송에러");	

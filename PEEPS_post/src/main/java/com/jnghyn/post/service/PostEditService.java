@@ -44,13 +44,6 @@ public class PostEditService {
 		dao = template.getMapper(PostDao.class);
 		postEditResult = dao.updatePost(post);
 
-		// 속성에 저장 -> 나중에 확인해서 출력
-//		model.addAttribute("result", postEditResult);
-
-		// test 게시글 idx 확인
-		int postidx = post.getP_idx();
-		System.out.println("게시글의 idx : " + postidx);
-		
 		fDao = template.getMapper(FileDao.class);
 		
 		// 기존 이미지 삭제
@@ -73,9 +66,7 @@ public class PostEditService {
 			
 			// 파일 배열에서 꺼내서 경로에 저장
 			for (MultipartFile mf : files) {
-//				fileName = mf.getOriginalFilename(); // 파일 이름
 				fileName = "postidx"+post.getP_idx();
-				// System.out.println("fileName : " + fileName);
 				newFileName = System.currentTimeMillis() + fileName;
 				
 				try {
@@ -118,9 +109,8 @@ public class PostEditService {
 			String pthumb = "default.jpg";
 			dao.updatePostThumbnail(post.getP_idx(), pthumb);
 		}
-		
-		
 
+		
 		return postEditResult;
 	}
 

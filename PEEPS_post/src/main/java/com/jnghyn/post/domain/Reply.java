@@ -27,15 +27,4 @@ public class Reply {
 				+ ", re_content=" + re_content + ", re_date=" + re_date + "]";
 	}
 
-//	public Reply(int re_idx, int comment_idx, int member_idx, String re_content, Timestamp re_date) {
-//		super();
-//		this.re_idx = re_idx;
-//		this.comment_idx = comment_idx;
-//		this.member_idx = member_idx;
-//		this.re_content = re_content;
-//		this.re_date = re_date;
-//	}
-	
-	
-
 }

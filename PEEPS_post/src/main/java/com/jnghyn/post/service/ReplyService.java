@@ -10,7 +10,6 @@ import com.jnghyn.post.dao.CommentDao;
 import com.jnghyn.post.domain.Reply;
 import com.jnghyn.post.domain.ReplyRequest;
 
-
 @Service
 public class ReplyService {
 

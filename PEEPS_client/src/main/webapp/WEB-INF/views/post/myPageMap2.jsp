@@ -295,7 +295,10 @@
 		}
 		
 		var memberidx = $('#idx').val();
+		/* test */
+		/* memberidx = 21; */
 		
+		/* alert(postAddr); */
 		console.log("함수로 들어오는 주소 : ",postAddr);
 		console.log("멤버인덱스 : ", memberidx);
 		var pageNum = 1;
@@ -309,17 +312,16 @@
 			"mIdx" : memberidx
 		};
 		
-		console.log("페이지 번호! : ",p);
-		
 		$.ajax({
 			// aws로
 			url: "http://localhost:8081/post/rest/postmaplist",	
 			type: 'post',
 			data : mapPostInfo,
+			/* dataType: 'json', */
 			success: function(data){
 				
 				console.log(data);
-				var list = $(data);
+				var list = $(data.postList);
 				console.log("지도마커클릭 데이터 포스트리스트 : ",list);
 				console.log("리스트 0인덱스 : ",list[0]);
 				console.log("포스트리스트 : ", list[0].member_idx);
@@ -346,13 +348,15 @@
 					
 					var html = '<div class="col-sm-4">';
 					   html += '<div class="panel panel-primary">';
-					   html += '<div class="panel-heading">'; 
+					   html += '<div class="panel-heading">';  /* href="postNO=${post.p_idx}" */
+					   /* html += '<a id="ptitle" class="postidx" href="<c:url value="/main/post/detail?idx='+item.p_idx+'"/>">'+item.p_title; */
 					   html += '<a id="ptitle" class="postidx" href="<c:url value="/detail?idx='+list[i].p_idx+'"/>">'+pt;
 					   html += '</a></div><div class="panel-body">';
 					   html += '<a class="postidx" href="<c:url value="/detail?idx='+list[i].p_idx+'"/>">';
 					   // aws로
 					   html += '<img src="http://localhost:8081/post/resources/fileupload/postfile/'+list[i].p_thumbnail+'" class="img-responsive" style="width: 325px; height: 325px;" alt="Image"></a>';
 					   html += '</div><div class="panel-footer">'+date+'</div></div></div>';
+					  /*  $('.postList').append(html); */
 					   $('.row').append(html);
 					
 				}
@@ -396,6 +400,8 @@
 					$('.paging').append(pHtml);
 					
 				}; 
+				
+				
 				
 			},
 			error: function(request, status, error) {

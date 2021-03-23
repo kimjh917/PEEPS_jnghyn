@@ -13,7 +13,6 @@ import com.jnghyn.post.domain.CommentRequest;
 import com.jnghyn.post.domain.Post;
 import com.jnghyn.post.dao.CommentDao;
 
-// 21.02.17 댓글 서비스 추가 한경
 @Service
 public class CommentService {
 
@@ -24,20 +23,6 @@ public class CommentService {
 	@Autowired
 	private SqlSessionTemplate template;
 
-//	// 댓글 조회
-//	// 인덱스로 아이디 검사해서 list.add
-//	public List<Comment> cmtSelect(int post_idx) {
-//		
-//		dao = template.getMapper(CommentDao.class);
-//		
-//		List<Comment> cmtList = dao.selectCmtList(post_idx);
-//		
-//		System.out.println("코멘트 리스트 : "+cmtList);
-// 		
-//		/*return dao.selectCmtList(post_idx);*/
-//		return cmtList;
-//	}
-	
 	// 댓글 조회
 	// 인덱스로 아이디 검사해서 list.add
 	public CommentListView cmtSelect(int post_idx) {
@@ -46,7 +31,7 @@ public class CommentService {
 		
 		List<Comment> cmtList = dao.selectCmtList(post_idx);
 		
-		System.out.println("코멘트 리스트 : "+cmtList);
+//		System.out.println("코멘트 리스트 : "+cmtList);
 		
 		pDao = template.getMapper(PostDao.class);
 		
@@ -57,9 +42,8 @@ public class CommentService {
 		int allCandR = allReplyCnt + allCmtCnt;
 				
  		CommentListView clistView = new CommentListView(cmtList, post, allCandR);
- 		System.out.println("리스트뷰 : "+clistView);
+// 		System.out.println("리스트뷰 : "+clistView);
 		
-		/*return dao.selectCmtList(post_idx);*/
 		return clistView;
 	}
 
@@ -74,8 +58,6 @@ public class CommentService {
 
 		result = dao.insertCmt(comment);
 		
-		
-		
 		return result;
 	}
 
@@ -86,7 +68,7 @@ public class CommentService {
 
 		int result = 0;
 
-		System.out.println("댓글 수정 : " + cmt_content);
+//		System.out.println("댓글 수정 : " + cmt_content);
 
 		result = dao.updateCmt(cmt_idx, cmt_content);
 
