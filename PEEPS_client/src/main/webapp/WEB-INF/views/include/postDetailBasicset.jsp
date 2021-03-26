@@ -13,7 +13,6 @@
 	src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.bundle.min.js"
 	integrity="sha384-ygbV9kiqUc6oa4msXn9868pTtWMgiQaeYH7/t7LECLbyPA2x65Kgf80OJFdroafW"
 	crossorigin="anonymous"></script>
-<link href="<c:url value="/resources/css/nav.css" />" rel="stylesheet">
 <style>
 @import
 	url('https://fonts.googleapis.com/css2?family=Nanum+Gothic:wght@400;700;800&display=swap')
@@ -234,11 +233,6 @@ a:hover {
 	outline: none;
 }
 
-body {
-	background-color: #fcf9f6;
-	font-family: 'Nanum Gothic', sans-serif;
-}
-
 /* 댓글 */
 .comment {
 	resize: none;
@@ -302,6 +296,11 @@ body {
 
 .id {
 	font-weight: 800;
+}
+
+body {
+	background-color: #fcf9f6;
+	font-family: 'Nanum Gothic', sans-serif;
 }
 </style>
 

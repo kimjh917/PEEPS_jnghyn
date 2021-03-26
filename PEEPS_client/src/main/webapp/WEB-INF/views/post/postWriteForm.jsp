@@ -13,7 +13,6 @@
 </head>
 
 <%@ include file="/WEB-INF/views/include/postWriteBasicset.jsp"%>  
-<link href="<c:url value="/resources/css/nav.css" />" rel="stylesheet">
 <body>
 <%@ include file="/WEB-INF/views/include/nav.jsp"%>
 	<div class="post_wrap">

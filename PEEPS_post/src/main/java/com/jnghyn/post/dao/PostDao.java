@@ -42,6 +42,9 @@ public interface PostDao {
 	// 게시글 좋아요 개수 update
 	int updatePostLikes(int pIdx, int pm);
 
+	// 게시글 검색
+	List<Post> selectPostByKeyword(String keyword);
+
 	
 
 }

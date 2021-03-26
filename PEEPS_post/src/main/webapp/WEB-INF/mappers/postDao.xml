@@ -100,4 +100,24 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		where p_idx=#{param1} 
 	</update>
 
+   <!-- 게시글 검색 -->
+   <!-- 해당 단어가 들어가는 게시글 검색 -->
+   <select id="selectPostByKeyword" resultType="com.jnghyn.post.domain.Post">
+      select * from post
+      <where>
+         <include refid="searchTitle" />
+         <include refid="searchContent" />
+      </where>
+      order by p_date desc
+   </select>
+
+   <!-- 제목과 이름 해당하면 다 검색 -->
+   <sql id="searchTitle">
+      or p_title like concat('%',#{keyword},'%')
+   </sql>
+
+   <sql id="searchContent">
+      or p_content like concat('%',#{keyword},'%') 
+   </sql>
+
 </mapper>

@@ -126,10 +126,6 @@
 	margin: 15px 10px;
 }
 
-/* #cannotSee {
-	display: none;
-} */
-
 body {
 	background-color: #fcf9f6;
 	font-family: 'Nanum Gothic', sans-serif;

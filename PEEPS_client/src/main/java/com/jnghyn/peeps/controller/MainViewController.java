@@ -1,8 +1,10 @@
 package com.jnghyn.peeps.controller;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -38,7 +40,7 @@ public class MainViewController {
 	// 게시글 작성 폼
 	@RequestMapping("/upload")
 	public String goWriteForm() {
-		return "post/writeForm";
+		return "post/postWriteForm";
 	}
 	
 	// 마이페이지의 지도 리스트
@@ -63,6 +65,15 @@ public class MainViewController {
 			@RequestParam("idx") int postIdx
 			) {
 		return "post/postEditForm";
+	}
+	
+	// 게시글 검색 
+	@RequestMapping("/search")
+	public String searchPost(
+			Model model,
+			HttpServletRequest request
+			) {
+		return "post/postSearch";
 	}
 	
 

@@ -10,8 +10,6 @@
 <link rel="stylesheet"
 	href="<c:url value="/resources/css/bootstrap.css" />">
 
-<link href="<c:url value="/resources/css/nav.css" />" rel="stylesheet">
-
 <style>
 .container-fluid {
 	height: 50px;
@@ -200,6 +198,9 @@
   border-color: #DDD;
 }
 
-
+body {
+	background-color: #fcf9f6;
+	font-family: 'Nanum Gothic', sans-serif;
+}
 
 </style>
