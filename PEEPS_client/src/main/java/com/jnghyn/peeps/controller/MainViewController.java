@@ -1,5 +1,8 @@
 package com.jnghyn.peeps.controller;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
@@ -32,8 +35,14 @@ public class MainViewController {
 	@RequestMapping("/{mid}")
 	public String goMyPage(
 			@RequestParam(value = "p", defaultValue = "1") int p,
-			@PathVariable("mid") String mid
+			@PathVariable("mid") String mid,
+			HttpSession session
 			) {
+		
+		// 임시 로그인 정보 session
+		Peeps peeps = new Peeps(1, "쩡", "jnghyn", "profilephoto.jpg", "#일상기록 #핍스");
+		session.setAttribute("peeps", peeps);
+		
 		return "post/myPage";
 	}
 	
@@ -72,7 +81,10 @@ public class MainViewController {
 	public String searchPost(
 			Model model,
 			HttpServletRequest request
-			) {
+			) throws UnsupportedEncodingException {
+		String keyword = request.getParameter("keyword");
+		String PostKeyword = URLDecoder.decode(keyword, "UTF-8");
+		model.addAttribute("PostKeyword", PostKeyword);
 		return "post/postSearch";
 	}
 	
