@@ -51,7 +51,7 @@ public class PostController {
 
 	// 게시글 하나 출력
 	@GetMapping("/detail")
-	public Post getPostDetail(@RequestParam("idx") int postIdx, HttpServletRequest request) {
+	public Post getPostDetail(@RequestParam("idx") int postIdx) {
 		return listService.getDetail(postIdx);
 	}
 
@@ -75,15 +75,13 @@ public class PostController {
 
 	// 지도 리스트 출력
 	@GetMapping("/map")
-	public List<Post> getMapList(@RequestParam("mId") String mId, @RequestParam("mIdx") int mIdx,
-			HttpServletRequest request) {
+	public List<Post> getMapList(@RequestParam("mId") String mId, @RequestParam("mIdx") int mIdx) {
 		return listService.getMapListView(mIdx);
 	}
 
 	// 마커 클릭 시 해당 주소가 추가된 게시글 리스트 출력
 	@PostMapping("/postmaplist")
-	public List<Post> getMapPostList(@RequestParam("postAdd") String pAddr, @RequestParam("mIdx") int mIdx,
-			HttpServletRequest request) {
+	public List<Post> getMapPostList(@RequestParam("postAdd") String pAddr, @RequestParam("mIdx") int mIdx) {
 		return listService.getPostListByMapView(mIdx, pAddr);
 	}
 
@@ -105,7 +103,6 @@ public class PostController {
 	// 게시글 검색
 	@PostMapping("/searchPost")
 	public List<Post> PostList(@RequestParam("keyword") String keyword) {
-
 		return listService.getPostListByK(keyword);
 	}
 
