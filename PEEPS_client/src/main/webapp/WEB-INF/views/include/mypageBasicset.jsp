@@ -113,6 +113,7 @@
 	border-right: 1px solid #ccc;
 	border-left: 1px solid #ccc;
 	font-size: 1.2em;
+	background-color: white;
 }
 
 #mapPageBtn {
