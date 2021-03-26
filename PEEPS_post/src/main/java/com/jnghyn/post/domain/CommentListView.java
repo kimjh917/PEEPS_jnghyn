@@ -12,7 +12,6 @@ public class CommentListView {
 	private int allCmtRplCnt; // 게시글에 해당하는 전체 댓글+대댓글 수
 	
 	public CommentListView(List<Comment> cmtList, Post post, int allCmtRplCnt) {
-		super();
 		this.cmtList = cmtList;
 		this.post = post;
 		this.allCmtRplCnt = allCmtRplCnt;

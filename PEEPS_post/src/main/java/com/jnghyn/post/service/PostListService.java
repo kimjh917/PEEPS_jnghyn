@@ -91,7 +91,6 @@ public class PostListService {
 		try {
 			// PostDao 구현체 생성
 			dao = template.getMapper(PostDao.class);
-
 			postList = dao.selectPostByAddrList(pAddr, mIdx);
 
 		} catch (Exception e) {
@@ -198,8 +197,6 @@ public class PostListService {
 
 	public List<Post> getPostListByK(String keyword) {
 		dao = template.getMapper(PostDao.class);
-
-		System.out.println(keyword);
 
 		List<Post> PostList = dao.selectPostByKeyword(keyword);
 

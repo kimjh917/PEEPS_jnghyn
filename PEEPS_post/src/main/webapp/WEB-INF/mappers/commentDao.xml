@@ -5,7 +5,6 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
 <mapper namespace="com.jnghyn.post.dao.CommentDao">
 
-	<!-- 21.02.17 댓글 쿼리 추가 한경 -->
 	<!-- 댓글 등록 -->
 	<insert id="insertCmt"
 		parameterType="com.jnghyn.post.domain.Comment"
@@ -74,15 +73,6 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		delete from reply where re_idx=#{re_idx}
 	</delete>
 
-
-	<!-- 21.02.26 한경 추가 -->
-    <!-- 댓글 상위 3개 -->
-    <select id="selectCmtListLimit"
-       resultType="com.jnghyn.post.domain.Comment">
-       select * from comment where post_idx = #{post_idx} limit 3;
-    </select>
-    
-    <!-- 21.02.26 정현 추가 -->
     <!-- 게시글idx에 해당하는 총 대댓글 수  -->
     	<select id="countAllReply" resultType="int">
 		select count(*) from comment as c 

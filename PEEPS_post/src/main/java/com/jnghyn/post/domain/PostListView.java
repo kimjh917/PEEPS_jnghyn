@@ -2,6 +2,9 @@ package com.jnghyn.post.domain;
 
 import java.util.List;
 
+import lombok.Getter;
+
+@Getter
 public class PostListView {
 	
 	private List<Post> postList; // 한 페이지에 노출할 게시글 정보 리스트
@@ -31,29 +34,6 @@ public class PostListView {
 		}
 	}
 	
-	//getter
-	public int getPageNumber() {
-		return pageNumber;
-	}
-	public int getTotalPostCount() {
-		return totalPostCount;
-	}
-	public int getCntPerPage() {
-		return cntPerPage;
-	}
-	public List<Post> getPostList() {
-		return postList;
-	}
-	public int getStartRow() {
-		return startRow;
-	}
-	public int getEndRow() {
-		return endRow;
-	}
-	public int getTotalPageCount() {
-		return totalPageCount;
-	}
-
 	@Override
 	public String toString() {
 		return "PostListView [pageNumber=" + pageNumber + ", totalPostCount=" + totalPostCount + ", cntPerPage="

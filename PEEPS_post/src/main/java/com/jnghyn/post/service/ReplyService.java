@@ -31,11 +31,8 @@ public class ReplyService {
 	public int InsertReply(ReplyRequest request) {
 
 		dao = template.getMapper(CommentDao.class);
-
 		int result = 0;
-
 		Reply reply = request.GetRe();
-
 		result = dao.insertReply(reply);
 
 		return result;
@@ -45,13 +42,9 @@ public class ReplyService {
 	public int EditReply(int re_idx, String re_content) {
 
 		dao = template.getMapper(CommentDao.class);
-		
 		int result = 0;
-		
 		System.out.println(re_idx);
-
 		System.out.println("댓글 수정 : " + re_content);
-
 		result = dao.updateReply(re_idx, re_content);
 
 		return result;
@@ -61,9 +54,7 @@ public class ReplyService {
 	public int DelReply(int re_idx) {
 
 		dao = template.getMapper(CommentDao.class);
-
 		int result = 0;
-
 		result = dao.deleteReply(re_idx);
 
 		return result;

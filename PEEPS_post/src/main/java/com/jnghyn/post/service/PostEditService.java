@@ -29,7 +29,6 @@ public class PostEditService {
 		int postEditResult = 0;
 
 		MultipartFile[] files = editRequest.getPostformfile();
-		System.out.println("file[0]크기 : "+files[0].getSize());
 
 		// 웹 경로
 		String uploadPath = "/resources/fileupload/postfile";
@@ -80,12 +79,9 @@ public class PostEditService {
 					// 21.03.02 파일 (실제)경로 설정
 					postFile.setF_path(saveDirPath);
 
-					System.out.println("!!!postFile : " + postFile);
-
 					// 파일 DB insert
 					fDao = template.getMapper(FileDao.class);
 					int postFileResult = fDao.insertFiles(postFile);
-					System.out.println("!!postFileResult : " + postFileResult);
 
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -100,7 +96,6 @@ public class PostEditService {
 		} // 파일 저장 if 끝
 		
 		List<PostFile> newImgList = fDao.selectPostImgs(post.getP_idx());
-		System.out.println("저장된 이미지 리스트 : "+newImgList);
 		if(newImgList.size() != 0) {
 			// 썸네일 update
 			String pthumb = newImgList.get(0).getF_name();

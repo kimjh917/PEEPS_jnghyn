@@ -6,18 +6,17 @@ import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.jnghyn.post.dao.CommentDao;
 import com.jnghyn.post.dao.PostDao;
 import com.jnghyn.post.domain.Comment;
 import com.jnghyn.post.domain.CommentListView;
 import com.jnghyn.post.domain.CommentRequest;
 import com.jnghyn.post.domain.Post;
-import com.jnghyn.post.dao.CommentDao;
 
 @Service
 public class CommentService {
 
 	private CommentDao dao;
-	
 	private PostDao pDao;
 
 	@Autowired
@@ -31,8 +30,6 @@ public class CommentService {
 		
 		List<Comment> cmtList = dao.selectCmtList(post_idx);
 		
-//		System.out.println("코멘트 리스트 : "+cmtList);
-		
 		pDao = template.getMapper(PostDao.class);
 		
 		Post post = pDao.selectPostDetail(post_idx);
@@ -42,7 +39,6 @@ public class CommentService {
 		int allCandR = allReplyCnt + allCmtCnt;
 				
  		CommentListView clistView = new CommentListView(cmtList, post, allCandR);
-// 		System.out.println("리스트뷰 : "+clistView);
 		
 		return clistView;
 	}
@@ -51,11 +47,8 @@ public class CommentService {
 	public int cmtInsert(CommentRequest request) {
 
 		dao = template.getMapper(CommentDao.class);
-
 		int result = 0;
-
 		Comment comment = request.GetCmt();
-
 		result = dao.insertCmt(comment);
 		
 		return result;
@@ -65,13 +58,9 @@ public class CommentService {
 	public int cmtEdit(int cmt_idx, String cmt_content) {
 
 		dao = template.getMapper(CommentDao.class);
-
 		int result = 0;
-
-//		System.out.println("댓글 수정 : " + cmt_content);
-
 		result = dao.updateCmt(cmt_idx, cmt_content);
-
+		
 		return result;
 	}
 
@@ -79,9 +68,7 @@ public class CommentService {
 	public int cmtDel(int cmt_idx) {
 
 		dao = template.getMapper(CommentDao.class);
-
 		int result = 0;
-
 		result = dao.deleteCmt(cmt_idx);
 
 		return result;
@@ -91,9 +78,7 @@ public class CommentService {
 	public int CountCmt(int post_idx) {
 
 		dao = template.getMapper(CommentDao.class);
-
 		int result = 0;
-
 		result = dao.CountCmt(post_idx);
 
 		return result;

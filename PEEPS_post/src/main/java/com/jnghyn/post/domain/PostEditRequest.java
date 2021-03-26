@@ -4,6 +4,11 @@ import java.util.Arrays;
 
 import org.springframework.web.multipart.MultipartFile;
 
+import lombok.Getter;
+import lombok.Setter;
+
+@Getter
+@Setter
 public class PostEditRequest {
 	
 	private int userIdx;	// 회원idx
@@ -15,54 +20,6 @@ public class PostEditRequest {
 	private String deleteImage[];  // 삭제할 기존 이미지
 	private String oldImage[]; // 기존 원본 이미지 
 	
-	public int getUserIdx() {
-		return userIdx;
-	}
-	public void setUserIdx(int userIdx) {
-		this.userIdx = userIdx;
-	}
-	public int getPostIdx() {
-		return postIdx;
-	}
-	public void setPostIdx(int postIdx) {
-		this.postIdx = postIdx;
-	}
-	public String getPtitle() {
-		return ptitle;
-	}
-	public void setPtitle(String ptitle) {
-		this.ptitle = ptitle;
-	}
-	public String getPcontent() {
-		return pcontent;
-	}
-	public void setPcontent(String pcontent) {
-		this.pcontent = pcontent;
-	}
-	public String getPloc() {
-		return ploc;
-	}
-	public void setPloc(String ploc) {
-		this.ploc = ploc;
-	}
-	public MultipartFile[] getPostformfile() {
-		return postformfile;
-	}
-	public void setPostformfile(MultipartFile[] postformfile) {
-		this.postformfile = postformfile;
-	}
-	public String[] getDeleteImage() {
-		return deleteImage;
-	}
-	public void setDeleteImage(String[] deleteImage) {
-		this.deleteImage = deleteImage;
-	}
-	public String[] getOldImage() {
-		return oldImage;
-	}
-	public void setOsldImage(String[] oldImage) {
-		this.oldImage = oldImage;
-	}
 	// editRequest -> post
 	public Post toPost() {
 		Post post = new Post();
