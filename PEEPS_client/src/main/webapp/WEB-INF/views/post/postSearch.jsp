@@ -97,6 +97,27 @@ a {
 	vertical-align: middle;
 }
 
+.scrollToTop {
+	border: none;
+	background-color: #fcf9f6;
+}
+
+.scrollToTop>img {
+	width: 40px;
+	height: 40px;
+	position: fixed;
+	right: 100px;
+	bottom: 50px;
+}
+
+#no_post {
+	margin: 150px auto;
+	font-size: 30px;
+	text-align: center;
+	width: 600px;
+	height: 600px;
+}
+
 body {
 	background-color: #fcf9f6;
 	font-family: 'Nanum Gothic', sans-serif;
@@ -110,5 +131,16 @@ body {
 	
 	</div>
 	
+	<button class="scrollToTop"><img src="<c:url value="/resources/icon/up.png"/>"></button>
+	
 </body>
+
+<script type="text/javascript">
+	//버튼 클릭 시 맨 위로 스크롤
+	$(document).on("click", ".scrollToTop", function(){
+		$('html, body').animate({scrollTop : 0},800);
+		return false;
+	});
+</script>
+
 </html>
