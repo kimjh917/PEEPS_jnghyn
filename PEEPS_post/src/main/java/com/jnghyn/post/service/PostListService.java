@@ -26,7 +26,7 @@ public class PostListService {
 	private SqlSessionTemplate template;
 
 	// 게시글 전체 리스트 불러오기
-	public PostListView getPostListView(int pageNumber, HttpServletRequest request, int mIdx) {
+	public PostListView getPostListView(int pageNumber, int mIdx) {
 
 		PostListView listView = null;
 

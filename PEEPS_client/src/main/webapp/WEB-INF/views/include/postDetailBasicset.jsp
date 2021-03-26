@@ -101,7 +101,7 @@
 	width: 80px;
 	height: 45px;
 	text-align: center;
-	padding: 13px;
+	padding: 10px;
 }
 
 .carousel-inner>div {

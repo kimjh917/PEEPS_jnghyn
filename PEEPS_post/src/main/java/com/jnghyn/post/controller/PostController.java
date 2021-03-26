@@ -44,9 +44,9 @@ public class PostController {
 
 	// 게시글 리스트 출력
 	@GetMapping("/list")
-	public PostListView getPostList(HttpServletRequest request, @RequestParam(value = "p", defaultValue = "1") int page,
+	public PostListView getPostList(@RequestParam(value = "p", defaultValue = "1") int page,
 			@RequestParam("mId") String mId, @RequestParam("mIdx") int mIdx) {
-		return listService.getPostListView(page, request, mIdx);
+		return listService.getPostListView(page, mIdx);
 	}
 
 	// 게시글 하나 출력

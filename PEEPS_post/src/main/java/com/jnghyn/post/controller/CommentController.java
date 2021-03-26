@@ -5,7 +5,6 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -15,7 +14,6 @@ import com.jnghyn.post.domain.CommentRequest;
 import com.jnghyn.post.domain.Reply;
 import com.jnghyn.post.domain.ReplyRequest;
 import com.jnghyn.post.service.CommentService;
-import com.jnghyn.post.service.PostListService;
 import com.jnghyn.post.service.ReplyService;
 
 @RestController
@@ -27,9 +25,6 @@ public class CommentController {
 	private CommentService commentService;
 	@Autowired
 	private ReplyService replyService;
-	
-	@Autowired
-	private PostListService listService;
 	
 	// 댓글 목록 조회
 	@GetMapping(value = "/select")
