@@ -20,6 +20,26 @@
 </style>
 
 <style>
+input[type="search"] {
+   padding-left: 10px;
+   float: left;
+   height: 30px;
+   border-radius: 30px;
+   border-top-right-radius: 0;
+   border-bottom-right-radius: 0;
+   border: none;
+   width: 200px;
+}
+
+nav ul li button {
+   background-color: #EEF0ED;
+   height: 30px;
+   border: none;
+   border-radius: 30px;
+   border-top-left-radius: 0;
+   border-bottom-left-radius: 0;
+}
+
 .post_wrap {
 	width: 1000px;
 	height: auto;
@@ -308,7 +328,6 @@ body {
 <script src="https://code.jquery.com/jquery-1.12.4.min.js"
 	integrity="sha256-ZosEbRLbNQzLpnKIkEdrPv7lOy9C27hHQ+Xp8a4MxAQ="
 	crossorigin="anonymous">
-	
 </script>
 
 <script>
@@ -323,10 +342,8 @@ body {
 	}
 	
 	var postIdx = getParameterByName('idx');
-	console.log("포스트인덱스 : ", postIdx);
 	
 	var sessionMidx = "${peeps.m_idx}";
-	console.log("세션정보!!!~~ : ", sessionMidx);
 	
     $(document).ready(function() {
 
@@ -356,8 +373,7 @@ body {
 
         // 컨트롤러로 값 넘기기 (회원 게시글 데이터 받기)
         $.ajax({
-        	// 추후 aws 주소로 바꾸기
-			url: 'http://localhost:8081/post/rest/detail?idx='+postIdx,
+			url: 'http://52.79.234.178:8080/post/rest/detail?idx='+postIdx,
             type: 'GET',
             success: function(data) {
             	
@@ -369,7 +385,6 @@ body {
         			type: 'GET',
         			data: {"mIdx" : data.member_idx},
         			success: function(data){
-        				console.log("회원 정보 : ",data);
         				var html = '<img class="postuserphoto" onclick="GoMyPage(' + data.m_idx + ')" src="<spring:url value="/resources/img/'+data.m_photo+'"/>">';
         				   html += '<span class="memberid" onclick="GoMyPage(' + data.m_idx + ')">'+data.id+'</span> ';
         				$('.post_top').append(html);
@@ -379,14 +394,10 @@ body {
         			}
             	});
             	
-                //var infoHtml = '<input type="hidden" class="memberidx" value="' + data.member_idx + '">';
-                //$('.memberid').append(infoHtml);
-
                 var pIdx = data.p_idx;
 				
                 // 본인 게시글일 경우 수정,삭제 버튼 추가
                 if (sessionMidx == data.member_idx) {
-                    console.log("세션midx랑 게시글midx가 같습니다.");
                     var Btn = '<a class="deleteBtn" href="javascript:deletePost(' +
                         data.p_idx + ');">삭제</a>';
                     Btn += '<a class="editBtn" href="<c:url value="/edit?idx=' +
@@ -422,8 +433,7 @@ body {
 
         // 컨트롤러로 값 넘기기 (회원 게시글 이미지 데이터 받기)
         $.ajax({
-        	// 추후 aws 주소로 바꾸기
-            url: "http://localhost:8081/post/rest/detail/image?idx=" + postIdx,
+            url: "http://52.79.234.178:8080/post/rest/detail/image?idx=" + postIdx,
             type: 'post',
             success: function(data) {
 
@@ -434,7 +444,7 @@ body {
                 
 				// 이미지 1개
                 if (data.length == 1) {
-                    var html = '<div class="oneImg"><img src="http://localhost:8081/post/resources/fileupload/postfile/' + data[0].f_name + '"/></div>';
+                    var html = '<div class="oneImg"><img src="http://52.79.234.178:8080/post/resources/fileupload/postfile/' + data[0].f_name + '"/></div>';
                     $('.postpics').append(html);
                 }
 				
@@ -459,14 +469,14 @@ body {
                     $.each(firstImg, function(index, item) {
 
                         var html1 = '<div class="carousel-item active">';
-                        html1 += '<img src="http://localhost:8081/post/resources/fileupload/postfile/' + item.f_name + '" class="d-block w-100" alt="..."></div>';
+                        html1 += '<img src="http://52.79.234.178:8080/post/resources/fileupload/postfile/' + item.f_name + '" class="d-block w-100" alt="..."></div>';
                         $('.carousel-inner').append(html1);
                     })
 
                     var anthrImg = $(data).not(firstImg);
                     $.each(anthrImg, function(index, item) {
                         var html2 = '<div class="carousel-item">';
-                        html2 += '<img src="http://localhost:8081/post/resources/fileupload/postfile/' + item.f_name + '" class="d-block w-100" alt="..."></div>';
+                        html2 += '<img src="http://52.79.234.178:8080/post/resources/fileupload/postfile/' + item.f_name + '" class="d-block w-100" alt="..."></div>';
                         $('.carousel-inner').append(html2);
                     })
                 }
@@ -486,12 +496,10 @@ body {
         };
         // 컨트롤러로 값 넘기기 (좋아요 여부 데이터 받기)
         $.ajax({
-        	// 추후 aws 주소로 바꾸기
-            url: "http://localhost:8081/post/rest/likeChk",
+            url: "http://52.79.234.178:8080/post/rest/likeChk",
             type: 'GET',
             data: likeInfo,
             success: function(data) {
-                console.log("좋아요 여부 : ", data.likeChk);
 
                 if (data.likeChk == 1) {
                     var likeHtml = '<img style="width: 30px; height: 30px;" src="<spring:url value="/resources/icon/like1.png"/>">';
@@ -514,8 +522,6 @@ body {
 	// 프사와 아이디 클릭 시 해당 계정의 마이페이지로 이동
 	function GoMyPage(idx) {
 	
-	    console.log(idx);
-	
 	    $.ajax({
 	    	url: '${pageContext.request.contextPath}/rest/memberInfo',
 	        type: 'get',
@@ -527,7 +533,7 @@ body {
 	            location.href = "${pageContext.request.contextPath}/"+data.id;
 	        },
 	        error: function(e) {
-	            console.log("유저 정보 실패,,,,");
+	            console.log("유저 정보 실패");
 	        }
 	    });
 	
@@ -539,8 +545,7 @@ body {
 	    if (confirm('삭제하시겠습니까?')) {
 	
 	        $.ajax({
-	        	// 추후 aws 주소로 바꾸기
-	            url: "http://localhost:8081/post/rest/delete?idx=" + pidx,
+	            url: "http://52.79.234.178:8080/post/rest/delete?idx=" + pidx,
 	            type: 'GET',
 	            success: function(data) {
 	                var memberid = "${peeps.id}";
@@ -558,7 +563,6 @@ body {
 	// 좋아요 버튼 클릭
 	function clickLikeBtn() {
 	    var memberidx = "${peeps.m_idx}";
-	    console.log("멤버 인덱스 : ", memberidx);
 	
 	    var likeInfo = {
 	        "pIdx": postIdx,
@@ -566,14 +570,10 @@ body {
 	    };
 	
 	    $.ajax({
-	    	// 추후 aws 주소로
-	        url: "http://localhost:8081/post/rest/likes",
+	        url: "http://52.79.234.178:8080/post/rest/likes",
 	        type: 'get',
 	        data: likeInfo,
 	        success: function(data) {
-	            console.log("좋아요 ajax 성공");
-	            console.log("받은 데이터 : ", data);
-	            console.log(data.p_likes);
 	
 	            $('.likes').empty();
 	
@@ -622,8 +622,6 @@ body {
 	// 답글 누르면 폼 생기게
 	function replyForm(idx) {
 
-		console.log(idx);
-
 		// 세션받아오기
 		var memberId = "${peeps.id}";
 		var memberphoto = "${peeps.m_photo}";
@@ -641,7 +639,6 @@ body {
 	function replyEdit(idx) {
 
 		var origin = $('.comment .cmt .reply #load_re').eq(idx).val();
-		console.log(idx);
 
 		// 세션받아오기
 		var memberId = "${peeps.id}";
@@ -666,40 +663,27 @@ body {
 
         // 컨트롤러로 값 넘기기 (댓글 데이터 받기) 
         $.ajax({
-        	// 추후 aws로
-            url: "http://localhost:8081/post/rest/cmt/select?PostNO=" + postIdx,
+            url: "http://52.79.234.178:8080/post/rest/cmt/select?PostNO=" + postIdx,
             type: 'get',
             data: {
                 "postIdx": postIdx
             },
             success: function(data) {
-                //console.log("댓글 성공");
-               // console.log(data);
                 var comment = data.cmtList;
-                //console.log("코멘트리스트:", comment);
                 var member_idx = data.post.member_idx;
-                //console.log("멤버idx:", member_idx);
-
 
                 $('.commentTotal').empty();
-                //console.log("@@@총 댓글 수! : ", data.allCmtRplCnt);
                 $('.commentTotal').append(data.allCmtRplCnt);
 
                 $('.comment').empty();
                 $.each(data.cmtList, function(index, cmt) {
-                    console.log("댓글 ajax each문 진입");
                     // 멤버 정보 받아오는 ajax 시작 (댓글)
                     $.ajax({
                         url: '${pageContext.request.contextPath}/rest/memberList',
                         type: 'GET',
                         success: function(data) {
-                            //console.log("멤버 ajax success");
-                            //console.log("멤버 데이터 : ", data)
 
                             $.each(data, function(index, mbr) {
-                                console.log("멤버 ajax each문 진입");
-                                //console.log("each1 :", mbr.m_idx);
-                                //console.log("each2 :", cmt.member_idx);
 
                                 if (mbr.m_idx == cmt.member_idx) {
 
@@ -715,15 +699,14 @@ body {
 
                         },
                         error: function(e) {
-                            console.log("댓글 ajax속 멤버 ajax 실패");
+                            console.log(e);
                         }
 
                     }); // 멤버 정보 받아오는 ajax 끝 (댓글)
 
                     // 대댓글
                     $.ajax({
-                    	// 추후 aws로
-                        url: 'http://localhost:8081/post/rest/cmt/reply/select',
+                        url: 'http://52.79.234.178:8080/post/rest/cmt/reply/select',
                         type: 'get',
                         data: {
                             "cmt_idx": cmt.cmt_idx
@@ -731,30 +714,25 @@ body {
                         success: function(data) {
                             $.each(data, function(index, reply) {
                                 if (cmt.cmt_idx == reply.comment_idx) {
-                                    //console.log("댓idx=대댓idx 인 reply! : ", reply);
-                                    //console.log("댓idx=대댓idx 인 reply 의 index! : ", index);
 
                                     if (reply.member_idx == sessionMidx) {
-                                       // console.log("&1 대댓 확인 : ", reply);
                                         // 멤버 정보 받아오는 ajax 시작 (대댓글)
                                         $.ajax({
                                             url: '${pageContext.request.contextPath}/rest/memberList',
                                             type: 'GET',
                                             success: function(data) {
                                                 $.each(data, function(index, mbr) {
-													
                                                     if (mbr.m_idx == reply.member_idx) {
                                                        $('#' + reply.comment_idx).append("<div class='reply' name='" + reply.re_idx + "'><img class='postuserphoto' onclick='GoMyPage(" + mbr.m_idx + ");' src= '<c:url value='/resources/img/"+mbr.m_photo+"'/>'> <span class='id' onclick='GoMyPage(" + mbr.m_idx + ");'> " + mbr.id + " </span> <input type='text' id='load_re' value='" + reply.re_content + "'><button id='re_edit' type='submit'>수정</button>  <button id='re_del' type='submit'>삭제</button></div>");
                                                     }
                                                 });
                                             },
                                             error: function(e) {
-                                                console.log("댓글 ajax속 멤버 ajax 실패");
+                                                console.log(e);
                                             }
                                         }); // 멤버 정보 받아오는 ajax 끝 (대댓글)
 
                                     } else {
-                                        console.log("&2 대댓 확인 : ", reply);
 
                                         // 멤버 정보 받아오는 ajax 시작 (대댓글)
                                         $.ajax({
@@ -771,7 +749,7 @@ body {
 
                                             },
                                             error: function(e) {
-                                                console.log("댓글 ajax속 멤버 ajax 실패");
+                                                console.log(e);
                                             }
 
                                         }); // 멤버 정보 받아오는 ajax 끝 (대댓글)
@@ -781,7 +759,7 @@ body {
                             }); // each 끝
                         },
                         error: function(e) {
-                            console.log("대댓글 실패,,,,");
+                            console.log("대댓글 실패");
                         }
 
                     }); // 대댓글 끝
@@ -790,7 +768,7 @@ body {
 
             },
             error: function(e) {
-                console.log("댓글 실패,,,,");
+                console.log("댓글 실패");
             }
         }); // 댓글 ajax 끝
 
@@ -798,22 +776,19 @@ body {
 
     $(function() {
 
-        //console.log("포스트IDX확인 : ", postIdx);
-
         // 댓글 작성
         $(document).on("click", ".cmtbtn", function() {
 
             var cmt = $('#cmttxt').val();
 
             var mIdx = "${peeps.m_idx}";
-            console.log("댓글 작성의 mIdx : ", mIdx);
 
             if (cmt.trim() == "") {
                 alert("내용을 입력해주세요");
 
             } else {
                 $.ajax({
-                    url: 'http://localhost:8081/post/rest/cmt/insert',
+                    url: 'http://52.79.234.178:8080/post/rest/cmt/insert',
                     type: 'post',
                     async: false,
                     data: {
@@ -822,12 +797,11 @@ body {
                         "cmt_content": cmt
                     },
                     success: function(data) {
-                        console.log("작성 완료");
                         $('#cmttxt').val('');
                         loadComment();
                     },
                     error: function() {
-                        console.log("작성 실패,,,,");
+                        console.log("작성 실패");
                     }
                 });
             }
@@ -840,13 +814,11 @@ body {
             var idx = $('.comment .cmt #cmt_del').index(this);
             var cmt_idx = document.getElementsByClassName('cmt')[idx].id;
 
-            console.log(idx);
-
             if (confirm('댓글을 삭제하시겠습니까?')) {
 
                 $('.comment .cmt').eq(idx).remove();
                 $.ajax({
-                    url: 'http://localhost:8081/post/rest/cmt/del',
+                    url: 'http://52.79.234.178:8080/post/rest/cmt/del',
                     type: 'post',
                     async: false,
                     data: {
@@ -854,7 +826,6 @@ body {
                     },
                     success: function(data) {
                         if (data == 1) {
-                            console.log("삭제 완료");
                             loadComment();
                         } else {
                             console.log("삭제 실패");
@@ -862,7 +833,7 @@ body {
 
                     },
                     error: function() {
-                        console.log("수정 실패,,,,");
+                        console.log("수정 실패");
                     }
                 });
             }
@@ -885,7 +856,7 @@ body {
                     alert("내용을 입력해주세요");
                 } else {
                     $.ajax({
-                        url: 'http://localhost:8081/post/rest/cmt/edit',
+                        url: 'http://52.79.234.178:8080/post/rest/cmt/edit',
                         type: 'post',
                         async: false,
                         data: {
@@ -893,12 +864,11 @@ body {
                             "cmt_content": cmt
                         },
                         success: function(data) {
-                            console.log("수정 완료");
                             $('#cmttxt_edit').val('');
                             loadComment();
                         },
                         error: function() {
-                            console.log("수정 실패,,,,");
+                            console.log("수정 실패");
                         }
                     });
                 }
@@ -932,26 +902,23 @@ $(function() {
             if (reply.trim() == "") {
                 alert("내용을 입력해주세요");
             } else {
-                // 세션 m_idx 값 넣기
 
                 var sessionMidx = "${peeps.m_idx}";
+                
                 $.ajax({
-                	// 추후 aws로
-                    url: 'http://localhost:8081/post/rest/cmt/reply/insert',
+                    url: 'http://52.79.234.178:8080/post/rest/cmt/reply/insert',
                     type: 'post',
                     data: {
                         "comment_idx": cmt_idx,
                         "member_idx": sessionMidx,
                         "re_content": reply
                     },
-                    success: function(
-                        data) {
-                        console.log("대댓글 작성 완료");
+                    success: function(data) {
                         $('#reply_insert').val('');
                         loadComment();
                     },
                     error: function() {
-                        console.log("대댓글 작성 실패,,,,");
+                        console.log("대댓글 작성 실패");
                     }
                 });
             }
@@ -970,8 +937,6 @@ $(function() {
         var idx = $('.comment .cmt .reply #re_edit').index(this);
         var re_idx = document.getElementsByClassName('reply')[idx].getAttribute('name');
 
-        console.log(re_idx);
-
         replyEdit(idx);
 
         $("#reply_insert_btn").click(function() {
@@ -982,22 +947,19 @@ $(function() {
                 alert("내용을 입력해주세요");
             } else {
                 $.ajax({
-                	// 추후 aws로
-                    url: 'http://localhost:8081/post/rest/cmt/reply/edit',
+                    url: 'http://52.79.234.178:8080/post/rest/cmt/reply/edit',
                     type: 'post',
                     async: false,
                     data: {
                         "re_idx": re_idx,
                         "re_content": reply
                     },
-                    success: function(
-                        data) {
-                        console.log("대댓글 수정 완료");
+                    success: function(data) {
                         $('#cmttxt_edit').val('');
                         loadComment();
                     },
                     error: function() {
-                        console.log("대댓글  실패,,,,");
+                        console.log("대댓글  실패");
                     }
                 });
             }
@@ -1021,8 +983,7 @@ $(function() {
 
             $('.comment .cmt #reply').eq(idx).remove();
             $.ajax({
-            	// 추후 aws로
-                url: 'http://localhost:8081/post/rest/cmt/reply/del',
+                url: 'http://52.79.234.178:8080/post/rest/cmt/reply/del',
                 type: 'post',
                 async: false,
                 data: {
@@ -1030,15 +991,13 @@ $(function() {
                 },
                 success: function(data) {
                     if (data == 1) {
-                        console.log("대댓글 삭제 완료");
                         loadComment();
                     } else {
                         console.log("삭제 실패");
                     }
-
                 },
                 error: function() {
-                    console.log("수정 실패,,,,");
+                    console.log("수정 실패");
                 }
             });
 

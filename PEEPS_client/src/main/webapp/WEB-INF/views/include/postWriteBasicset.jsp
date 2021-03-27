@@ -1,7 +1,8 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
-
+<%@ page import="java.util.Date" %>
+<%@ page import="java.text.SimpleDateFormat" %>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 
 <style>
@@ -11,6 +12,26 @@
 </style>
 
 <style>
+input[type="search"] {
+   padding-left: 10px;
+   float: left;
+   height: 30px;
+   border-radius: 30px;
+   border-top-right-radius: 0;
+   border-bottom-right-radius: 0;
+   border: none;
+   width: 200px;
+}
+
+nav ul li button {
+   background-color: #EEF0ED;
+   height: 30px;
+   border: none;
+   border-radius: 30px;
+   border-top-left-radius: 0;
+   border-bottom-left-radius: 0;
+}
+
 .post_wrap {
 	width: 1000px;
 	height: auto;

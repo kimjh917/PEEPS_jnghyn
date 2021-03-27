@@ -23,9 +23,6 @@ public class MemberRestController {
 	// 전체 회원 정보 조회
 	@GetMapping("/memberList")
 	public List<Peeps> MemberList(HttpServletRequest request){
-		
-		System.out.println("member rest controller 진입");
-		
 		return findMemberService.getMemberList();
 	}
 	
@@ -34,9 +31,6 @@ public class MemberRestController {
 	public Peeps MemberInfo(
 			@RequestParam("mIdx") int mIdx
 			){
-		
-		System.out.println("member rest controller 진입");
-		
 		return findMemberService.getMemberInfo(mIdx);
 	}
 	
@@ -45,9 +39,6 @@ public class MemberRestController {
 	public Peeps MbrInfo(
 			@RequestParam("mId") String mId
 			){
-		
-		System.out.println("member rest controller 진입");
-		
 		return findMemberService.getMbrInfo(mId);
 	}
 

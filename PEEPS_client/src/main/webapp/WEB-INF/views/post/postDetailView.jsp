@@ -2,7 +2,6 @@
 	pageEncoding="UTF-8"%>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
-<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ page import="java.util.Date" %>
 <%@ page import="java.text.SimpleDateFormat" %>
 
@@ -10,7 +9,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Peeps</title>
+<title>PEEPS</title>
 </head>
 
 <%@ include file="/WEB-INF/views/include/postDetailBasicset.jsp"%>  
@@ -30,7 +29,7 @@
 			<!-- 게시글 제목 -->
 			<tr>
 				<td>
-					<div class="ptitle" name="ptitle">
+					<div class="ptitle">
 					</div>
 				</td>
 			</tr>
@@ -70,7 +69,6 @@
 						<span class="rightside">
 						
 						<button type="button" class="likeBtn" onclick="javascript:clickLikeBtn();">
-						<%-- <img style="width: 30px; height: 30px;" src="<spring:url value='/resources/img/likespic.png'/>"> --%>
 						</button>
 						<!-- 좋아요 -->
 						<span class="likes" style="margin: 0 5px;"></span>
@@ -86,7 +84,6 @@
 			<tr>
 				<td>
 				<div class="cmtdiv">
-					<%-- <img class="postuserphoto" src="<spring:url value='/resources/img/puppy3.jpg'/>"> --%>
 						
 					<img class="postuserphoto" src="<c:url value="/resources/img/${peeps.m_photo}"/>"/>
 											

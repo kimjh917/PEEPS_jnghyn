@@ -8,12 +8,11 @@
 <title></title>
 </head>
 
-<link rel="stylesheet"
-	href="<c:url value="/resources/css/nav.css" />">
+<link rel="stylesheet" href="<c:url value="/resources/css/nav.css" />">
+
 <body>
 	<nav>
 		<ul class="icon">
-			<!--아이콘 경로 바꾸기 -->
 			<li class="left"><span><input type="search" id="search" placeholder="검색">
 					<button id="keyword" type="submit">
 						<img src="<c:url value='/resources/icon/search.png'/>">

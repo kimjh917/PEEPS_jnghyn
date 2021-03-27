@@ -10,8 +10,27 @@
 	;
 </style>
 
-
 <style>
+input[type="search"] {
+   padding-left: 10px;
+   float: left;
+   height: 30px;
+   border-radius: 30px;
+   border-top-right-radius: 0;
+   border-bottom-right-radius: 0;
+   border: none;
+   width: 200px;
+}
+
+nav ul li button {
+   background-color: #EEF0ED;
+   height: 30px;
+   border: none;
+   border-radius: 30px;
+   border-top-left-radius: 0;
+   border-bottom-left-radius: 0;
+}
+
 .post_wrap {
 	width: 1000px;
 	height: auto;

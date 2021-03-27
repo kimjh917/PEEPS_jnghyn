@@ -1,15 +1,10 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
-<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@ page import="java.util.Date" %>
-<%@ page import="java.text.SimpleDateFormat" %>
-
 <!DOCTYPE html>
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Peeps</title>
+<title>PEEPS</title>
 </head>
 
 <%@ include file="/WEB-INF/views/include/postWriteBasicset.jsp"%>  
@@ -18,11 +13,6 @@
 	<div class="post_wrap">
 		<form method="post" enctype="multipart/form-data" id="uploadForm">
 		<table class="post">
-			<tr>
-				<td>							<!-- test 회원idx  -->
-					<!-- <input type="hidden" name="userIdx" value="1"> -->
-				</td>
-			</tr>
 			<!-- 날짜 -->
 			<tr>
 				<td class="pdate_wrap">
@@ -88,13 +78,12 @@
 			<!-- 버튼 -->
 			<tr>
 				<td class="post_cnclorsubmt">
-					<input type="button" class="resetBtn" value="취소" onclick="location.href='<c:url value="/user/mypage?id=${id}"/>'">
+					<input type="button" class="resetBtn" value="취소" onclick="location.href='<c:url value="/${peeps.id}"/>'">
 					<input type="button" class="sbmtBtn" value="등록" id="submitbtn" onclick="javascript:actionForm();">
 				</td>
 			</tr>
 		</table>
 		</form>
-		
 		
 		<script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
 		<script src="//dapi.kakao.com/v2/maps/sdk.js?appkey=84d2ab0cba961be165262c6b55a5fa3b&libraries=services"></script>
@@ -152,52 +141,39 @@
 		// 파일 업로드 이미지 버튼 클릭 시 
         function uploadImgBtnClick(){
         	$('#postformfile').trigger('click');
-        	
         };
         
         // 위치 취소 버튼 클릭 시
         function xBtnClick(){
-        	/* alert('엑스버튼 클릭'); */
-        	
         	$('.cLocBtn').remove();
         	$('.searchlocBox').val("");
         	mapContainer.style.display = "none";
-        	
         };
         
         var image_list = [];
         
      // 뷰에서 선택한 이미지를 삭제 (추가한 이미지)
     	function deleteNewImageAction(index) {
-    		console.log('테스트 4');
     		
     		var delFname = $('#imgPrv'+index).data('file');
-    		console.log(delFname); 
+    		
     		for(var i=0; i<image_list.length; i++){
-    			console.log(image_list[i].name);
     			
     			if(image_list[i].name == delFname){
     				image_list.splice(i,1);
     			};
     		};
 			
-    		/* console.log("index :" + index);
-    		image_list.splice(index, 1); */
     		var target = $('#img_id_' + index);
-    		console.log(target);
     		$(target).remove();
-    		console.log(image_list);
     	}; 
     	
     	 //폼 데이터 전송 메서드
 	    function actionForm(){		
 	    		
-	    	//var uploadForm = document.getElementById("#uploadForm");
-	    	console.log("---------",image_list);
 	    	var uploadForm = $('#uploadForm')[0];
 	    			
 	    	var formData = new FormData(uploadForm);
-	    	
 	    	
 	    	var ptchk = formData.get('ptitle');
 	    	var pcchk = formData.get('pcontent');
@@ -205,8 +181,6 @@
 	    		alert("제목과 내용은 필수로 입력하셔야 합니다.")
 	    		return false;
 	    	}; 
-	    	
-	    	console.log("이미지 리스트 : ", image_list);
 	    	
 	    	// 이미지 파일 있을 경우
 	    	if(image_list.length > 0){
@@ -226,14 +200,11 @@
 	    	
 	    	/* 세션에서 회원 idx 받아오기 */
 	    	var m_idx = ${peeps.m_idx};	
-	    	console.log("세션으로 받아온 midx : ", m_idx);
 	    	formData.append("userIdx", m_idx);
-	    	console.log("최종 formdata : ", formData);
 	    	
 	    	//ajax로 폼데이터 전송
 	    	$.ajax({
-	    		// 추후 aws 주소로 바꾸기
-				url: 'http://localhost:8081/post/rest/upload',
+				url: 'http://52.79.234.178:8080/post/rest/upload',
 	    		type : 'POST',
 	    		data : formData,
 	    		processData: false,
@@ -242,7 +213,6 @@
 	    		
 	    		/* 세션으로 받아온 회원id */
 	    		var memberid = "${peeps.id}";
-	    		console.log("ajax 데이터 : ",data);				
 	    		window.location.href="${pageContext.request.contextPath}/"+memberid;
 	    					
 	    		},error: function(e){
@@ -280,7 +250,6 @@
 	                    $(this).val(userInput);
 	                    inputStrLen = 30;
 	                };
-	                /* $('#textnumber').text(inputStrLen); */
 	            });
 	            
 	            // 파일 업로드 버튼 클릭
@@ -291,7 +260,6 @@
 	        
 	    	// 파일 업로드 버튼 클릭 시 실행 메서드
 	        function handleImgFileSelect(e) {
-				console.log('테스트 7');
 				
 				if(e.target.files.length>20){
 			    	  alert("이미지는 20개까지 업로드 가능합니다.")
@@ -300,9 +268,7 @@
 			      };
 				
 				var files = e.target.files;
-				console.log("files---------- : ",files);
 				var filesArr = Array.prototype.slice.call(files);
-				console.log("filesArr : ", filesArr);
 							
 				var index = 0;
 				
@@ -313,44 +279,38 @@
 					tempList.push(image_list);
 				}
 				tempList.push(filesArr);
-				console.log("템프리스트 : ", tempList);
-				console.log("템프리스트 인덱스 0 :",tempList[0]);
 				
 				if(tempList.length > 20){
 					alert("이미지는 20개까지 업로드 가능합니다.");
 					return false;
 				}
 				
-				filesArr.forEach(function(f) {
-							if (!f.type.match("image.*")) {
-								alert('이미지 파일만 가능합니다.')
-								/* $("input[type='file']").val(""); */
-								return;
-							};
-							
-							image_list.push(f);
-							
-							if(image_list.length > 20){
-								alert('이미지는 20개까지 업로드 가능합니다');
-								console.log("배열1 길이:",image_list.length);
-								image_list.splice(20,image_list.length);
-								console.log("배열2 길이:",image_list.length);
-								return false;
-							};
-							
-	            console.log("image_list",image_list); 
-							
-							var reader = new FileReader();
-							reader.onload = function(e) {
-								
-								var img_html = '<a href="javascript:void(0);" onclick=\"deleteNewImageAction('+ index + ');\" id="img_id_'+ index+ '" class="img_event" >';
-								img_html += '<img src="'+e.target.result+'" data-file="'+f.name+'" id="imgPrv'+index+'" class="imgPrv" style="width:148px; height:148px;"></a>';
-								index++;
-								$('.preview').append(img_html);
-							};
-							reader.readAsDataURL(f);
-													
-						});
+
+                filesArr.forEach(function(f) {
+                    if (!f.type.match("image.*")) {
+                        alert('이미지 파일만 가능합니다.')
+                        return;
+                    };
+
+                    image_list.push(f);
+
+                    if (image_list.length > 20) {
+                        alert('이미지는 20개까지 업로드 가능합니다');
+                        image_list.splice(20, image_list.length);
+                        return false;
+                    };
+
+                    var reader = new FileReader();
+                    reader.onload = function(e) {
+
+                        var img_html = '<a href="javascript:void(0);" onclick=\"deleteNewImageAction(' + index + ');\" id="img_id_' + index + '" class="img_event" >';
+                        img_html += '<img src="' + e.target.result + '" data-file="' + f.name + '" id="imgPrv' + index + '" class="imgPrv" style="width:148px; height:148px;"></a>';
+                        index++;
+                        $('.preview').append(img_html);
+                    };
+                    reader.readAsDataURL(f);
+
+                });
 						
 			};
 	        

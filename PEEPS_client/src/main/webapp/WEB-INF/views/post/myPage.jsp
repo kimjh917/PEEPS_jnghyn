@@ -2,7 +2,6 @@
 	pageEncoding="UTF-8"%>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
-<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <!DOCTYPE html>
 <html>
@@ -13,7 +12,6 @@
 </head>
 
 <%@ include file="/WEB-INF/views/include/mypageBasicset.jsp"%> 
-
 
 <body>
 <%@ include file="/WEB-INF/views/include/nav.jsp"%>
@@ -59,22 +57,16 @@
 	}
 	
 	var sessionInfo = "${peeps}";
-	console.log("세션 정보 : ", sessionInfo);
 	
     var p = getParameterByName('p');
-    console.log("페이지 번호: ",p);
 	
 	var urlPath = location.pathname;
-	console.log("URL 패스네임 : ", urlPath);
 	var splitUrl = urlPath.split("/");
 	var pathMemberId = splitUrl[2];
-	console.log(splitUrl);
-	console.log("패스멤버아이디",pathMemberId);
 	
 	if(pathMemberId == ""){
 		pathMemberId = "jnghyn";
 	}
-	console.log("패스멤버아이디",pathMemberId);
 	
 	var menuHtml = '<button onclick="location.href=\'<c:url value="/'+pathMemberId+'"/>\'">';
 	   menuHtml += '<img src="<c:url value="/resources/icon/006-newsfeed.png"/>"></button>';
@@ -98,7 +90,6 @@
 				var html = '<img src="<spring:url value="/resources/img/'+data.m_photo+'"/>" style="width: 200px; height: 200px;">';
 				   html += '<div id="pro_btn"><input type="hidden" id="idx" value="'+data.m_idx+'"></div>';
 				$('#profile_wrap').append(html);
-				console.log("멤버정보!!",data);
 			},
 			error : function(request, status, error) {
 				console.log("에러 발생 : code = " +request.status + "message =" + request.responseText + "error : " + error);
@@ -109,25 +100,19 @@
 	function load_MyPage(){
 		
 		var memberidx = $('#idx').val();
-		console.log("멤버인덱스!",memberidx);
 		
 		var pathmId = {
 			"mId" : pathMemberId,
 			"mIdx" : memberidx
  		};
-		console.log("pathmId확인: ",pathmId);
 		
 		// post 리스트 정보 받아오기
 		$.ajax({
-			// 추후 aws 주소로 바꾸기
-			url: 'http://localhost:8081/post/rest/list?p='+p,
+			url: 'http://52.79.234.178:8080/post/rest/list?p='+p,
 			type: 'GET',
 			data: pathmId,
 			success: function(data){
-				console.log("ajax로 받아온 데이터 : ", data);
 				var list = $(data.postList);
-				console.log(list);
-				console.log("총 게시글 수 :", data.totalPostCount);
 				var tpc = data.totalPostCount;
 				
 				// member 정보 받아오기
@@ -136,8 +121,6 @@
 					type: 'get',
 					data: pathmId,
 					success: function(data){
-						
-						console.log("!!!!!회원정보: ",data);
 						
 						var html = '<input type="hidden" id="idx" value="'+data.m_idx+'">';
 					 	   html += '<ul><li>'+data.id+'</li>'; 
@@ -161,10 +144,7 @@
 				$.each(list, function(index, item){
 					
 					var date = item.p_date-540*60*1000;
-						
 					date = new Date(date).toLocaleDateString();
-					
-					console.log("날짜: ", date);
 					
 					var pt = item.p_title;
 					
@@ -172,32 +152,26 @@
 					if(pt.length > 20){
 						pt = pt.substring(0, 15);
 						pt = pt+"...";
-						console.log(pt);
 					} 
 					
 					var html = '<div class="col-sm-4">';
 					   html += '<div class="panel panel-primary">';
-					   html += '<div class="panel-heading">';  /* href="postNO=${post.p_idx}" */
-					   /* html += '<a id="ptitle" class="postidx" href="<c:url value="/main/post/detail?idx='+item.p_idx+'"/>">'+item.p_title; */
+					   html += '<div class="panel-heading">';  
 					   html += '<a id="ptitle" class="postidx" href="<c:url value="/detail?idx='+item.p_idx+'"/>">'+pt;
 					   html += '</a></div><div class="panel-body">';
 					   html += '<a class="postidx" href="<c:url value="/detail?idx='+item.p_idx+'"/>">';
-					   // 추후 aws 주소로 바꾸기
-					   html += '<img src="<c:url value="http://localhost:8081/post/resources/fileupload/postfile/'+item.p_thumbnail+'"/>" class="img-responsive" style="width: 325px; height: 325px;" alt="Image"></a>';
+					   html += '<img src="<c:url value="http://52.79.234.178:8080/post/resources/fileupload/postfile/'+item.p_thumbnail+'"/>" class="img-responsive" style="width: 325px; height: 325px;" alt="Image"></a>';
 					   html += '</div><div class="panel-footer">'+date+'</div></div></div>';
 					   
 					   $('.row').append(html);
 				});
 				// 페이징 처리
 				 if (data.totalPostCount>0){
-					 console.log('totalPageCount :' + data.totalPageCount);
 					for(var i=1; i <= data.totalPageCount; i++){			
 						if(data.pageNumber == i){
-							/* var html2 =' <span><a class="pageBtn" id="nowPgBtn" href="<c:url value="/main/jhS2"/>?p='+i+'">'+i+'</a></span> '; */
 							var html2 =' <span><a class="pageBtn" id="nowPgBtn" href="<c:url value="/'+pathMemberId+'"/>?p='+i+'">'+i+'</a></span> ';
 							$('.paging').append(html2);
 						} else {
-							/* var html2 =' <span><a class="pageBtn" href="<c:url value="/main/jhS2"/>?p='+i+'">'+i+'</a></span> '; */
 							var html2 =' <span><a class="pageBtn" href="<c:url value="/'+pathMemberId+'"/>?p='+i+'">'+i+'</a></span> ';
 							$('.paging').append(html2);
 						}

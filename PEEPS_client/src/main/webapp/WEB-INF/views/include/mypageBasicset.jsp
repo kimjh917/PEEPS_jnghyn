@@ -7,25 +7,35 @@
 <!--jquery 라이브러리 로드-->
 <script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
 
-<link rel="stylesheet"
-	href="<c:url value="/resources/css/bootstrap.css" />">
+<link rel="stylesheet" href="<c:url value="/resources/css/bootstrap.css" />">
 
 <style>
+input[type="search"] {
+   padding-left: 10px;
+   float: left;
+   height: 30px;
+   border-radius: 30px;
+   border-top-right-radius: 0;
+   border-bottom-right-radius: 0;
+   border: none;
+   width: 200px;
+}
+
+nav ul li button {
+   background-color: #EEF0ED;
+   height: 30px;
+   border: none;
+   border-radius: 30px;
+   border-top-left-radius: 0;
+   border-bottom-left-radius: 0;
+}
+
 .container-fluid {
 	height: 50px;
 	text-align: center;
 	width: 1100px;
 	color: black;
 	max-width: 100%;
-}
-
-#top_wrap {
-	margin: 0px auto;
-	position: fixed;
-	z-index: 999;
-	top: 0px;
-	left: 0px;
-	right: 0px;
 }
 
 #nav_wrap {
@@ -57,6 +67,7 @@
 	margin: 100px auto 0px auto;
 	text-align: center;
 	background-color: #F5E978;
+	border-radius: 10px;
 }
 
 #profile_wrap>img {
@@ -190,10 +201,6 @@
 	text-decoration: none;
 	color: white;
 }
-
-/* .panel-heading {
-	color: #ccc;
-} */
 
 .panel-primary {
   border-color: #DDD;

@@ -22,7 +22,6 @@ public class FindMemberService {
 		List<Peeps> midList = null;
 		dao = template.getMapper(MemberDao.class);
 		midList = dao.selectMemberlist();
-		System.out.println("getMemberInfo 속 midList !" + midList);
 
 		return midList;
 	}
@@ -40,7 +39,7 @@ public class FindMemberService {
 		Peeps peeps = null;
 		dao = template.getMapper(MemberDao.class);
 		peeps = dao.selectMbrInfo(mId);
-		System.out.println("회원정보 : "+peeps);
+		
 		return peeps;
 	}
 
