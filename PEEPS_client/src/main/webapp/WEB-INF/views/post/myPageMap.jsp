@@ -74,7 +74,7 @@
 	   menuHtml += '<img src="<c:url value="/resources/icon/006-newsfeed.png"/>"></button>';
 	   menuHtml += '<button onclick="location.href=\'<c:url value="/'+pathMemberId+'/map"/>\'">';
 	   menuHtml += '<img src="<c:url value="/resources/icon/018-location pin.png"/>"></button>';
-	   menuHtml += '<button><img src="<c:url value="/resources/icon/017-friends.png"/>"></button>'; 
+	   menuHtml += '<button style="cursor: default;"><img src="<c:url value="/resources/icon/017-friends.png"/>"></button>'; 
 	   $('.menuselect').append(menuHtml);
 	
 	load_userInfo();

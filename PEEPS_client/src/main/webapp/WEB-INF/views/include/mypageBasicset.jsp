@@ -104,6 +104,11 @@ nav ul li button {
 	height: 35px;
 	font-size: 20px;
 	color: black;
+	cursor: default;
+}
+
+#pro_edit>a {
+	text-decoration: none;
 }
 
 #pro_name, #pro_bio {
