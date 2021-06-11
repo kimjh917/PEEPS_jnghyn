@@ -93,6 +93,7 @@ nav ul li button {
 #foll_btn {
 	border: 0;
 	background-color: #F5E978;
+	cursor: default;
 }
 
 #pro_edit {
